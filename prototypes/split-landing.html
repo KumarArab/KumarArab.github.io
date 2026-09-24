@@ -55,6 +55,7 @@
   .side p { margin: 0; max-width: 32ch; text-wrap: balance; }
   .content .side p { font: 400 22px/1.2 var(--serif); }
   .code .side p { font: 400 14px/1.55 var(--mono); }
+  .side .l2 { display: block; margin-top: 8px; opacity: .72; }
   .social { display: inline-flex; align-items: center; gap: 8px; color: inherit; text-decoration: none; font: 500 13px/1 var(--mono); letter-spacing: .04em; padding-bottom: 3px; border-bottom: 1px solid currentColor; }
   .social svg { width: 16px; height: 16px; }
   .cta { border: 0; cursor: pointer; margin-top: 6px; padding: 18px 30px; border-radius: 999px; display: inline-flex; gap: 12px; align-items: center; transition: transform .25s cubic-bezier(.3,1.6,.5,1); }
@@ -81,7 +82,8 @@
   #palettes { position: fixed; z-index: 20; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom, 0px) + 48px);
     display: flex; align-items: center; gap: 10px; padding: 8px 10px 8px 14px; border-radius: 999px; background: rgba(12,12,14,.72); color: #f2f2f2;
     backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); font: 500 11px/1 var(--mono); letter-spacing: .06em; }
-  #palettes .label { min-width: 13ch; }
+  #palettes .label { min-width: 25ch; }
+  #palettes .label b { font-weight: 700; }
   #palettes button { width: 26px; height: 26px; border-radius: 50%; border: 2px solid transparent; padding: 0; cursor: pointer; }
   #palettes button[aria-pressed="true"] { border-color: #fff; }
   #palettes button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
@@ -89,11 +91,15 @@
 
   @media (max-width: 759px) and (orientation: portrait) {
     #palettes { bottom: auto; top: calc(env(safe-area-inset-top, 0px) + 58px); }
-    #palettes .label { min-width: 0; max-width: 9ch; line-height: 1.2; }
+    #palettes .label { min-width: 0; }
+    #palettes .pname { display: none; }
+    #palettes { gap: 7px; padding: 7px 8px 7px 12px; }
+    #palettes button { width: 24px; height: 24px; }
     .hint { display: none; }
     .content h2 { font-size: 84px; }
     .code h2 { font-size: 64px; }
-    .side { gap: 14px; }
+    .side { gap: 12px; }
+    .side .l2 { display: none; }
   }
   @media (prefers-reduced-motion: reduce) { .code h2::after { animation: none; } }
 </style>
@@ -129,8 +135,8 @@
     <div class="side" data-side="code">
       <span class="eyebrow">the codebase</span>
       <h2>Code</h2>
-      <p>Mobile &amp; web developer. I build apps that are live on the Play Store, App Store and the web.</p>
-      <a class="social" href="https://www.linkedin.com/" target="_blank" rel="noopener"><svg><use href="#i-in"/></svg>LinkedIn ↗</a>
+      <p>Mobile developer building apps that sharpen your memory.<span class="l2">And products that fix my own problems first.</span></p>
+      <a class="social" href="https://www.linkedin.com/in/arab-kumar-b5853b191/" target="_blank" rel="noopener"><svg><use href="#i-in"/></svg>LinkedIn ↗</a>
       <button class="cta" data-enter="code">Enter Codebase <span aria-hidden="true">→</span></button>
     </div>
     <div class="page">
@@ -150,8 +156,8 @@
     <div class="side" data-side="content">
       <span class="eyebrow">the studio</span>
       <h2>Content</h2>
-      <p>I run Instagram pages, a YouTube channel and create UGC for brands.</p>
-      <a class="social" href="https://www.instagram.com/" target="_blank" rel="noopener"><svg><use href="#i-ig"/></svg>Instagram ↗</a>
+      <p>Relatable reels, informative posts, fashion and the occasional yap.<span class="l2">Content that feels like a friend, not a feed.</span></p>
+      <a class="social" href="https://www.instagram.com/flipsidefolly/" target="_blank" rel="noopener"><svg><use href="#i-ig"/></svg>@flipsidefolly ↗</a>
       <button class="cta" data-enter="content">Enter Studio <span aria-hidden="true">→</span></button>
     </div>
     <div class="page">
@@ -165,17 +171,23 @@
 </div>
 
 <div id="palettes" role="group" aria-label="Try a brand palette">
-  <span class="label" id="palName">Saffron Night</span>
+  <span class="label" id="palName">Today</span>
 </div>
 
 <script>
 (() => {
+  // one palette per day of the week (IST). Index 0 = Sunday, matching Date.getDay().
   const PALETTES = [
-    { name: 'Saffron Night', code: ['#0E1116', '#EDE6D6', '#F0A33A'], content: ['#F0A33A', '#17120B', '#0E1116', '#F6BC62'] },
-    { name: 'Forest & Blush', code: ['#0F2A22', '#EFE6D8', '#86D6A8'], content: ['#F1C4B3', '#4A1621', '#4A1621', '#F6D5C8'] },
-    { name: 'Graphite & Cobalt', code: ['#131316', '#ECECEC', '#6F86FF'], content: ['#2E48F0', '#FFF4E0', '#FFF4E0', '#4A61FF'] },
-    { name: 'Bone & Oxblood', code: ['#E9E2D4', '#1A1714', '#7A1F2B'], content: ['#7A1F2B', '#F4EADB', '#F4EADB', '#93303D'] },
+    { day: 'Sun', name: 'Bone & Oxblood', code: ['#E9E2D4', '#1A1714', '#7A1F2B'], content: ['#7A1F2B', '#F4EADB', '#F4EADB', '#93303D'] },
+    { day: 'Mon', name: 'Graphite & Cobalt', code: ['#131316', '#ECECEC', '#6F86FF'], content: ['#2E48F0', '#FFF4E0', '#FFF4E0', '#4A61FF'] },
+    { day: 'Tue', name: 'Forest & Blush', code: ['#0F2A22', '#EFE6D8', '#86D6A8'], content: ['#F1C4B3', '#4A1621', '#4A1621', '#F6D5C8'] },
+    { day: 'Wed', name: 'Navy & Coral', code: ['#0F1B33', '#F2ECE1', '#FF7A59'], content: ['#FF7A59', '#1B0F0A', '#0F1B33', '#FF9678'] },
+    { day: 'Thu', name: 'Espresso & Matcha', code: ['#1E1611', '#EFE4D2', '#A8C686'], content: ['#A8C686', '#1E1611', '#1E1611', '#BBD49D'] },
+    { day: 'Fri', name: 'Saffron Night', code: ['#0E1116', '#EDE6D6', '#F0A33A'], content: ['#F0A33A', '#17120B', '#0E1116', '#F6BC62'] },
+    { day: 'Sat', name: 'Aubergine & Lilac', code: ['#1E1226', '#EFE6F2', '#C8B3F0'], content: ['#C8B3F0', '#1E1226', '#1E1226', '#D7C7F5'] },
   ];
+  const todayIST = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(
+    new Intl.DateTimeFormat('en-US', { weekday: 'short', timeZone: 'Asia/Kolkata' }).format(new Date()));
   const root = document.documentElement;
   const col = {};
   function applyPalette(p) {
@@ -188,14 +200,14 @@
     root.style.setProperty('--content-ink', col.contentInk);
     root.style.setProperty('--content-accent', col.contentAccent);
     root.style.setProperty('--content-bg-2', col.contentBg2);
-    document.getElementById('palName').textContent = p.name;
+    document.getElementById('palName').innerHTML = `<b>${p.day === PALETTES[todayIST].day ? 'Today' : p.day}</b> <span class="pname">· ${p.name}</span>`;
     document.querySelectorAll('#palettes button').forEach(b => b.setAttribute('aria-pressed', b.dataset.name === p.name));
     rainReset();
   }
   const picker = document.getElementById('palettes');
   PALETTES.forEach(p => {
     const b = document.createElement('button');
-    b.dataset.name = p.name; b.title = p.name; b.setAttribute('aria-label', p.name);
+    b.dataset.name = p.name; b.title = `${p.day} · ${p.name}`; b.setAttribute('aria-label', `${p.day}: ${p.name}`);
     b.style.background = `linear-gradient(90deg, ${p.content[0]} 50%, ${p.code[0]} 50%)`;
     b.addEventListener('click', e => { e.stopPropagation(); applyPalette(p); });
     picker.appendChild(b);
@@ -340,7 +352,7 @@
     contentLayer.style.clipPath = clip(main);
 
     const e = base();
-    place(sides.content, clamp(e / 2, -A(), A()));
+    place(sides.content, clamp(e / 2 + (horiz ? 0 : 30), -A(), A()));
     place(sides.code, (e + A()) / 2);
 
     if (!reduce) rainStep(now);
@@ -378,7 +390,7 @@
     document.querySelectorAll('.clock').forEach(c => c.textContent = 'IST ' + s);
   }
 
-  applyPalette(PALETTES[0]);
+  applyPalette(PALETTES[todayIST] || PALETTES[5]);
   resize(); addEventListener('resize', resize);
   ptr.x = W / 2; ptr.y = H / 2;
   tick(); setInterval(tick, 15000);

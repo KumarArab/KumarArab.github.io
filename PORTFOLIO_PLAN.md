@@ -52,14 +52,22 @@ block stays centred in its own region.
 
 **Routes**: `/` split landing · `/code` developer page · `/content` creator page (+ sub-pages later).
 
-**Brand palette**: candidates below, pick one. Each side's accent is the other side's colour, which ties the two together.
+**Brand palette: one per day of the week** (picked by the IST weekday; visitors can preview the others).
+Each side's accent is the other side's colour.
 
-| Name | Code bg / ink / accent | Content bg / ink |
-|---|---|---|
-| Saffron Night (recommended) | #0E1116 / #EDE6D6 / #F0A33A | #F0A33A / #17120B |
-| Forest & Blush | #0F2A22 / #EFE6D8 / #86D6A8 | #F1C4B3 / #4A1621 |
-| Graphite & Cobalt | #131316 / #ECECEC / #6F86FF | #2E48F0 / #FFF4E0 |
-| Bone & Oxblood | #E9E2D4 / #1A1714 / #7A1F2B | #7A1F2B / #F4EADB |
+| Day | Name | Code bg / ink / accent | Content bg / ink |
+|---|---|---|---|
+| Sun | Bone & Oxblood | #E9E2D4 / #1A1714 / #7A1F2B | #7A1F2B / #F4EADB |
+| Mon | Graphite & Cobalt | #131316 / #ECECEC / #6F86FF | #2E48F0 / #FFF4E0 |
+| Tue | Forest & Blush | #0F2A22 / #EFE6D8 / #86D6A8 | #F1C4B3 / #4A1621 |
+| Wed | Navy & Coral | #0F1B33 / #F2ECE1 / #FF7A59 | #FF7A59 / #1B0F0A |
+| Thu | Espresso & Matcha | #1E1611 / #EFE4D2 / #A8C686 | #A8C686 / #1E1611 |
+| Fri | Saffron Night | #0E1116 / #EDE6D6 / #F0A33A | #F0A33A / #17120B |
+| Sat | Aubergine & Lilac | #1E1226 / #EFE6F2 / #C8B3F0 | #C8B3F0 / #1E1226 |
+
+**Landing copy**
+- Content: "Relatable reels, informative posts, fashion and the occasional yap." / "Content that feels like a friend, not a feed." · Instagram: https://www.instagram.com/flipsidefolly/
+- Code: "Mobile developer building apps that sharpen your memory." / "And products that fix my own problems first." · LinkedIn: https://www.linkedin.com/in/arab-kumar-b5853b191/
 
 **Type**: Instrument Serif (Content voice) · JetBrains Mono (Code voice) · Bricolage Grotesque (name/UI) · Permanent Marker (graffiti art only).
 
