@@ -36,27 +36,32 @@ and motion that always has a purpose.
 - **Content as data**: `src/content/projects.ts` so new projects are one entry, not new HTML.
 - **Deploy**: GitHub Actions → GitHub Pages, `public/CNAME` = `arabkumar.in`.
 
-## 3. Chosen direction: "Two Sides" (Developer × Creator)
+## 3. Chosen direction: "Code / Content"
 
-Supersedes the A/B/C concepts below. Prototype: `prototypes/split-landing.html`.
+Prototype: `prototypes/split-landing.html`.
 
-- **Landing**: full screen split, **blue = creator (left)**, **yellow = developer (right)**.
-  The boundary is liquid. Moving toward a side makes that colour flood the screen, which uncovers
-  that side's content. The name "Arab Kumar" straddles the line and flips colour as the liquid passes.
-  Click or tap to commit, and the liquid fills the screen as the page transition.
-- **Each side is its own world with its own design language**:
-  - Developer / "The Workshop" (yellow + ink + monospace): structured, precise, engineering feel.
-    Sections: Now → Experience (commit-log timeline) → Shipped apps (3D phones + store links + installs)
-    → Stack → Hire me.
-  - Creator / "The Studio" (cobalt + cream + serif italic): editorial, expressive, video-first, 9:16 frames.
-    Sections: Reach (live counters) → Pages (phone frames playing reels) → YouTube → Brand/UGC
-    case studies → Collaborate (media kit).
-- **Always switchable**: a small liquid toggle pill in the corner floods to the other side.
-- **Where they meet = green** (yellow + blue). The About/Contact page, "the whole person",
-  is the only green page. Reached from the bottom of either side.
-- **Two audiences, two CTAs**: dev → "Hire me / start a project"; creator → "Collaborate / media kit".
-- Routes: `/` (split) · `/dev` · `/creator` · `/me` (green) · `/dev/work/:slug` · `/creator/brands/:slug`.
-- Mobile: no hover, so tap a side or drag to flood. Side panels reveal only as a side takes over.
+**Landing (`/`)**: kept deliberately clean. A liquid split: Content on the left (top on phones),
+Code on the right (bottom on phones). The side you move toward floods the screen, and each side's
+block stays centred in its own region.
+- Content side: "the studio" · **Content** · one line on what I do · Instagram link · **Enter Studio**
+- Code side: "the codebase" · **Code_** · one line on what kind of developer I am · LinkedIn link · **Enter Codebase**
+- Background art at low opacity, with slight cursor parallax:
+  - Content: IG, YouTube, camera, reel, heart, comment, mic and clapper icons, plus graffiti words in a marker font.
+  - Code: matrix rain, LinkedIn, terminal, git, `</>`, bug and phone icons, plus code snippets.
+- The CTAs flood the screen with that side's colour, then route to a dedicated page.
+
+**Routes**: `/` split landing · `/code` developer page · `/content` creator page (+ sub-pages later).
+
+**Brand palette**: candidates below, pick one. Each side's accent is the other side's colour, which ties the two together.
+
+| Name | Code bg / ink / accent | Content bg / ink |
+|---|---|---|
+| Saffron Night (recommended) | #0E1116 / #EDE6D6 / #F0A33A | #F0A33A / #17120B |
+| Forest & Blush | #0F2A22 / #EFE6D8 / #86D6A8 | #F1C4B3 / #4A1621 |
+| Graphite & Cobalt | #131316 / #ECECEC / #6F86FF | #2E48F0 / #FFF4E0 |
+| Bone & Oxblood | #E9E2D4 / #1A1714 / #7A1F2B | #7A1F2B / #F4EADB |
+
+**Type**: Instrument Serif (Content voice) · JetBrains Mono (Code voice) · Bricolage Grotesque (name/UI) · Permanent Marker (graffiti art only).
 
 ## 3b. Earlier concepts (not chosen)
 
