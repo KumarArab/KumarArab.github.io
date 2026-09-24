@@ -36,7 +36,29 @@ and motion that always has a purpose.
 - **Content as data**: `src/content/projects.ts` so new projects are one entry, not new HTML.
 - **Deploy**: GitHub Actions → GitHub Pages, `public/CNAME` = `arabkumar.in`.
 
-## 3. Creative concept (pick one)
+## 3. Chosen direction: "Two Sides" (Developer × Creator)
+
+Supersedes the A/B/C concepts below. Prototype: `prototypes/split-landing.html`.
+
+- **Landing**: full screen split, **blue = creator (left)**, **yellow = developer (right)**.
+  The boundary is liquid. Moving toward a side makes that colour flood the screen, which uncovers
+  that side's content. The name "Arab Kumar" straddles the line and flips colour as the liquid passes.
+  Click or tap to commit, and the liquid fills the screen as the page transition.
+- **Each side is its own world with its own design language**:
+  - Developer / "The Workshop" (yellow + ink + monospace): structured, precise, engineering feel.
+    Sections: Now → Experience (commit-log timeline) → Shipped apps (3D phones + store links + installs)
+    → Stack → Hire me.
+  - Creator / "The Studio" (cobalt + cream + serif italic): editorial, expressive, video-first, 9:16 frames.
+    Sections: Reach (live counters) → Pages (phone frames playing reels) → YouTube → Brand/UGC
+    case studies → Collaborate (media kit).
+- **Always switchable**: a small liquid toggle pill in the corner floods to the other side.
+- **Where they meet = green** (yellow + blue). The About/Contact page, "the whole person",
+  is the only green page. Reached from the bottom of either side.
+- **Two audiences, two CTAs**: dev → "Hire me / start a project"; creator → "Collaborate / media kit".
+- Routes: `/` (split) · `/dev` · `/creator` · `/me` (green) · `/dev/work/:slug` · `/creator/brands/:slug`.
+- Mobile: no hover, so tap a side or drag to flood. Side panels reveal only as a side takes over.
+
+## 3b. Earlier concepts (not chosen)
 
 **A. "The Deck" (recommended).** It uses the cardistry hobby as the core idea.
 The hero is a 3D deck of playing cards floating in space. It reacts to the cursor, and on
