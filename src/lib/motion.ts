@@ -38,7 +38,7 @@ export function initCounters(scope: ParentNode = document) {
     const set = () => { el.textContent = obj.v.toFixed(dec) + suffix; };
     if (reduceMotion()) { obj.v = end; set(); return; }
     set();
-    gsap.to(obj, { v: end, duration: 1.8, ease: 'power3.out', onUpdate: set, scrollTrigger: { trigger: el, start: 'top 90%', once: true } });
+    gsap.to(obj, { v: end, duration: 1.8, ease: 'power3.out', onUpdate: set, scrollTrigger: { trigger: el, start: 'top bottom', once: true } });
   });
 }
 

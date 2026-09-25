@@ -1,8 +1,7 @@
 import '../styles/code.css';
-import { initPaletteChips, onPalette, type Palette } from '../lib/palette';
+import { initPaletteChips } from '../lib/palette';
 import { gsap, ScrollTrigger, initSmoothScroll, initCounters, initCursor, initMagnetic, revealLines, reduceMotion } from '../lib/motion';
 import { curtainIn, initTransitions } from '../lib/transition';
-import { createRain } from '../lib/rain';
 import { initClock } from '../lib/clock';
 import { apps, community, experience, facts, playables, products, profile, stack, type App } from './data';
 
@@ -12,9 +11,7 @@ const esc = (s: string) => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;
 const RM = reduceMotion();
 if (RM) document.documentElement.classList.add('rm');
 
-let palette: Palette = initPaletteChips();
-const rain = createRain($('#bg-rain') as HTMLCanvasElement, () => ({ bg: palette.code.bg, fg: palette.code.accent }), 20);
-onPalette(p => { palette = p; rain.reset(); });
+initPaletteChips();
 
 /* ---------- icons ---------- */
 const ICON = {
@@ -30,34 +27,6 @@ const ICON = {
 
 /* ---------- hero ---------- */
 $('[data-facts]').innerHTML = facts.map(f => `<li><b data-count="${f.value}" data-suffix="${f.suffix}">${f.value}${f.suffix}</b><span>${esc(f.label)}</span></li>`).join('');
-
-const CODE: [string, string?][] = [
-  ['// arab.dart\n', 'c'],
-  ['class ', 'k'], ['Arab ', ''], ['extends ', 'k'], ['Developer {\n', ''],
-  ['  final ', 'k'], ['role = ', ''], [`'${profile.title}'`, 's'], [';\n', ''],
-  ['  final ', 'k'], ['stack = [', ''], ["'Flutter'", 's'], [', ', ''], ["'Kotlin'", 's'], [', ', ''], ["'Compose'", 's'], ['];\n', ''],
-  ['  final ', 'k'], ['shipped = [', ''], ["'Moniepoint'", 's'], [', ', ''], ["'CRED'", 's'], [', ', ''], ["'Uni'", 's'], [', ', ''], ["'Fello'", 's'], ['];\n', ''],
-  ['  final ', 'k'], ['sideProjects = [', ''], ["'Cabo'", 's'], [', ', ''], ["'Matrix'", 's'], ['];\n\n', ''],
-  ['  bool get ', 'k'], ['openToWork => ', ''], ['true', 'k'], [';\n\n', ''],
-  ['  void ', 'k'], ['everyDay() => post(', ''], ["'linkedin'", 's'], [');\n}', ''],
-];
-function typeCode() {
-  const el = $('[data-typer]');
-  const html = (upto: number) => {
-    let left = upto, out = '';
-    for (const [text, cls] of CODE) {
-      if (left <= 0) break;
-      const part = esc(text.slice(0, left));
-      out += cls ? `<span class="${cls}">${part}</span>` : part;
-      left -= text.length;
-    }
-    return out + '<span class="caret"></span>';
-  };
-  const total = CODE.reduce((n, [t]) => n + t.length, 0);
-  if (RM) { el.innerHTML = html(total); return; }
-  const state = { n: 0 };
-  gsap.to(state, { n: total, duration: total / 42, ease: 'none', delay: 1.2, onUpdate: () => { el.innerHTML = html(Math.round(state.n)); } });
-}
 
 /* ---------- experience ---------- */
 $('[data-xp]').innerHTML = experience.map(r => `
@@ -222,14 +191,12 @@ initMagnetic();
 initClock();
 initTransitions();
 
-typeCode();
 
 if (!RM) {
-  // hero: reveal on load, drift away on scroll
-  gsap.from('.hero .kicker, .hero-sub, .facts li, .hero-ctas', { y: 30, autoAlpha: 0, duration: 1, ease: 'expo.out', stagger: 0.08, delay: 1.05 });
-  gsap.from('.editor', { y: 80, rotate: 8, autoAlpha: 0, duration: 1.4, ease: 'expo.out', delay: 1.2 });
-  gsap.to('.hero-copy', { yPercent: -18, autoAlpha: 0, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
-  gsap.to('.editor', { yPercent: 30, rotate: -6, autoAlpha: 0, ease: 'none', scrollTrigger: { trigger: '.hero', start: '20% top', end: 'bottom top', scrub: true } });
+  // hero: one calm entrance, then it quietly steps back as you scroll
+  gsap.from('.status, .hero-grid > *, .hero-foot', { y: 24, autoAlpha: 0, duration: 1.1, ease: 'expo.out', stagger: 0.08, delay: 1.1 });
+  gsap.from('.spec div', { autoAlpha: 0, x: -12, duration: 0.8, ease: 'expo.out', stagger: 0.06, delay: 1.3 });
+  gsap.to('.hero', { autoAlpha: 0.15, yPercent: -6, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'center top', end: 'bottom top', scrub: true } });
 
   // experience: one role in focus at a time
   const cards = $$('.xp-card');

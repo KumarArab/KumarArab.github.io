@@ -13,46 +13,44 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&display=swap">
 </head>
 <body class="code-page">
   <div class="curtain" style="background: var(--code-bg)"></div>
-  <canvas id="bg-rain" aria-hidden="true"></canvas>
-
   <header class="topbar">
-    <a class="home" href="/" data-go="home" aria-label="Back to arabkumar.in">← <b>Arab Kumar</b></a>
-    <nav class="secnav" aria-label="Sections">
-      <a href="#experience">Experience</a>
-      <a href="#apps">Apps</a>
-      <a href="#products">Products</a>
-      <a href="#play">Play</a>
-      <a href="#community">Community</a>
-      <a href="#contact">Contact</a>
+    <a class="home" href="/" data-go="home" aria-label="Back to arabkumar.in"><b>Arab Kumar</b></a>
+    <nav class="toplinks" aria-label="Page">
+      <a href="#experience">Work</a>
+      <a href="/resume.pdf" target="_blank" rel="noopener">Resume</a>
+      <a class="flip" href="/content/" data-go="content">Content <span aria-hidden="true">→</span></a>
     </nav>
-    <div class="topbar-r">
-      <span class="pill status"><span class="dot"></span>Open to opportunities</span>
-      <a class="pill" href="/resume.pdf" target="_blank" rel="noopener">Resume ↗</a>
-      <a class="pill flip" href="/content/" data-go="content">Content →</a>
-    </div>
   </header>
 
   <main>
     <!-- HERO -->
     <section class="hero" id="top">
-      <div class="hero-copy">
-        <p class="kicker">// the codebase · Senior Mobile Engineer · Flutter & Android · Bengaluru</p>
-        <h1 class="hero-title">I build apps people keep <em>coming back</em> to.</h1>
-        <p class="hero-sub">5 years shipping payments, lending and consumer apps at Moniepoint, CRED, Uni and Fello. After hours I build my own: a multiplayer game, an AI news app and tools that fix my own problems.</p>
+      <p class="status"><span class="dot"></span>Open to senior mobile roles</p>
+
+      <h1 class="hero-title">I build mobile apps for fintech, <span class="soft">and for fun.</span></h1>
+
+      <div class="hero-grid">
+        <p class="hero-sub">Five years shipping payments, lending and consumer apps in Flutter and native Android. After hours I ship my own: a multiplayer game, an AI news app and small tools that fix my own problems.</p>
+        <dl class="spec">
+          <div><dt>Now</dt><dd>Senior Mobile Engineer, Moniepoint</dd></div>
+          <div><dt>Before</dt><dd>CRED, Uni Cards, Fello</dd></div>
+          <div><dt>Stack</dt><dd>Flutter, Kotlin, Jetpack Compose</dd></div>
+          <div><dt>Shipped</dt><dd>Cabo, Matrix News, Paperid</dd></div>
+          <div><dt>Based</dt><dd>Bengaluru <span class="muted" data-clock>IST</span></dd></div>
+        </dl>
+      </div>
+
+      <div class="hero-foot">
         <ul class="facts" data-facts></ul>
         <div class="hero-ctas">
-          <a class="btn btn-accent" href="#experience" data-magnetic>See the work <span class="arrow">↓</span></a>
-          <a class="btn btn-ghost" href="/resume.pdf" target="_blank" rel="noopener">Resume <span class="arrow">↗</span></a>
+          <a class="link-cta" href="#experience">View work <span aria-hidden="true">↓</span></a>
+          <a class="link-cta quiet" href="/resume.pdf" target="_blank" rel="noopener">Resume <span aria-hidden="true">↗</span></a>
         </div>
       </div>
-      <figure class="editor" aria-label="A Dart class describing Arab">
-        <div class="editor-bar"><i></i><i></i><i></i><span>arab.dart</span></div>
-        <pre><code data-typer></code></pre>
-      </figure>
     </section>
 
     <!-- EXPERIENCE -->
@@ -60,7 +58,7 @@
       <div class="pin">
         <header class="sec-head">
           <p class="kicker">01 · Experience</p>
-          <h2>Where I've shipped.</h2>
+          <h2>Where I've worked.</h2>
         </header>
         <div class="xp-rail" aria-hidden="true"><span class="xp-fill"></span><ol data-xp-nodes></ol></div>
         <div class="xp-stage" data-xp></div>
