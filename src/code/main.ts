@@ -20,8 +20,8 @@ const ICON = {
   web: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>',
   github: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.2-3.4-1.2-.5-1.1-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 2.9.8.1-.7.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7 1 .7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2z" fill="currentColor"/></svg>',
   blog: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10l4 4v12H5zM14 4v5h5M8 13h8M8 17h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
-  linkedin: '<svg class="big" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="4" fill="currentColor"/><path d="M7 10.2V17M7 7v.1M11 17v-6.8m0 3.3c0-2 1.2-3.3 2.8-3.3s2.6 1.1 2.6 3.1V17" stroke="var(--code-bg)" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>',
-  youtube: '<svg class="big" viewBox="0 0 24 24" aria-hidden="true"><rect x="1.5" y="4.5" width="21" height="15" rx="4.5" fill="currentColor"/><path d="M10 8.8l5.6 3.2-5.6 3.2z" fill="var(--code-bg)"/></svg>',
+  linkedin: '<svg class="big" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="4" fill="currentColor"/><path d="M7 10.2V17M7 7v.1M11 17v-6.8m0 3.3c0-2 1.2-3.3 2.8-3.3s2.6 1.1 2.6 3.1V17" stroke="var(--glyph, var(--code-bg))" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>',
+  youtube: '<svg class="big" viewBox="0 0 24 24" aria-hidden="true"><rect x="1.5" y="4.5" width="21" height="15" rx="4.5" fill="currentColor"/><path d="M10 8.8l5.6 3.2-5.6 3.2z" fill="var(--glyph, var(--code-bg))"/></svg>',
   instagram: '<svg class="big" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor"/></svg>',
 };
 
@@ -85,7 +85,6 @@ $('[data-products]').innerHTML = products.map((p, i) => `
 /* ---------- playables ---------- */
 const playList = $('[data-play-list]');
 const playFrame = $<HTMLIFrameElement>('[data-play-frame]');
-const playCover = $('[data-play-cover]');
 const playOpen = $<HTMLAnchorElement>('[data-play-open]');
 let playIdx = 0, playLoaded = false;
 playList.innerHTML = playables.map((g, i) => `
@@ -107,13 +106,9 @@ playList.addEventListener('click', e => {
   const i = +b.dataset.game!;
   if (i === playIdx && playLoaded) return;
   loadGame(i);
-  playCover.classList.add('is-off');
 });
-playCover.addEventListener('click', () => {
-  if (!playLoaded) loadGame(playIdx);
-  playCover.classList.add('is-off');
-  playFrame.focus();
-});
+// the first ad loads as soon as the page has, so it is ready to play the moment you reach it
+addEventListener('load', () => loadGame(0), { once: true });
 
 /* ---------- community ---------- */
 function commVisual(c: (typeof community)[number]) {
@@ -126,7 +121,7 @@ function commVisual(c: (typeof community)[number]) {
 }
 $('[data-comm]').insertAdjacentHTML('beforeend', community.map(c => `
   <a class="ccard" href="${c.url}" target="_blank" rel="noopener">
-    <div class="ccard-visual">${commVisual(c)}</div>
+    <div class="ccard-visual" data-brand="${c.kind}">${commVisual(c)}</div>
     <div class="ccard-body"><small>${esc(c.handle)}${c.stat ? ` · <strong>${esc(c.stat)}</strong>` : ''}</small><b>${esc(c.name)}</b><p>${esc(c.line)}</p><span class="go">${esc(c.cta)} ↗</span></div>
   </a>`).join(''));
 
@@ -158,11 +153,9 @@ const io = new IntersectionObserver(entries => entries.forEach(en => {
     f.addEventListener('load', () => f.classList.add('is-loaded'), { once: true });
     f.src = f.dataset.src; delete f.dataset.src;
   }
-  if (f === playFrame && !playLoaded) loadGame(0);
   io.unobserve(f);
-}), { rootMargin: '400px 0px' });
+}), { rootMargin: '1200px 0px' });
 $$<HTMLIFrameElement>('iframe[data-src]').forEach(f => io.observe(f));
-io.observe(playFrame);
 
 /* ---------- motion ---------- */
 initSmoothScroll();
