@@ -76,7 +76,7 @@ section { position: relative; }
 /* ---------- apps: copy scrolls, phone stays ---------- */
 .apps { padding: 12vh var(--gutter) 6vh; max-width: 1440px; margin-inline: auto; }
 .apps-head { margin-bottom: 4vh; }
-.apps-body { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: clamp(32px, 7vw, 120px); align-items: start; }
+.apps-body { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: clamp(16px, 3vw, 48px); align-items: start; }
 .apps-copy { display: grid; }
 .app-copy { min-height: 88vh; display: grid; align-content: center; gap: 18px; padding-block: 6vh; opacity: .35; transition: opacity .5s var(--ease-out); }
 .app-copy.is-on { opacity: 1; }
@@ -95,14 +95,14 @@ section { position: relative; }
 .store:hover { transform: translateY(-2px); }
 .store svg { width: 18px; height: 18px; }
 .store.blog { background: none; color: var(--code-ink); box-shadow: inset 0 0 0 1px var(--line); }
-.phone-wrap { position: sticky; top: max(80px, calc(50vh - 300px)); align-self: start; width: min(560px, 40vw); }
+.phone-wrap { position: sticky; top: max(70px, calc(50vh - 330px)); align-self: start; width: min(760px, 50vw); }
 
 /* revolving ring of screenshots: cards sit around a circle and the ring turns slowly */
-.phone { --w: min(240px, 16vw); position: relative; height: calc(var(--w) * 5 / 3 + 120px); perspective: 1400px; }
+.phone { --w: min(300px, 20vw); position: relative; height: calc(var(--w) * 5 / 3 + 60px); perspective: 1400px; }
 .orbit { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; transition: opacity .6s var(--ease-out); pointer-events: none; }
 .orbit.is-on { opacity: 1; pointer-events: auto; }
 .ring-tilt { transform-style: preserve-3d; transform: rotateX(-7deg); }
-.ring { --r: calc(var(--w) / 2 / tan(180deg / var(--n)) * 1.18); position: relative; width: var(--w); aspect-ratio: 3 / 5; transform-style: preserve-3d; animation: ring-spin 30s linear infinite; }
+.ring { --r: calc(var(--w) / 2 / tan(180deg / var(--n)) * 1.08); position: relative; width: var(--w); aspect-ratio: 3 / 5; transform-style: preserve-3d; animation: ring-spin 30s linear infinite; }
 .orbit:hover .ring, .orbit-m:hover .ring { animation-play-state: paused; }
 .ring-card { position: absolute; inset: 0; margin: 0; border-radius: 18px; overflow: hidden; background: #111; backface-visibility: hidden; -webkit-backface-visibility: hidden;
   transform: rotateY(calc(var(--i) * 360deg / var(--n))) translateZ(var(--r)); box-shadow: 0 30px 60px -25px rgba(0,0,0,.8), 0 0 0 1px var(--line); }
@@ -222,7 +222,7 @@ section { position: relative; }
   .apps-body { grid-template-columns: 1fr; }
   .phone-wrap { display: none; }
   .app-copy { min-height: 0; opacity: 1; padding-block: 0 72px; }
-  .orbit-m { --w: min(150px, 38vw); display: grid; place-items: center; height: calc(var(--w) * 5 / 3 + 60px); perspective: 1000px; margin-bottom: 8px; overflow: hidden; }
+  .orbit-m { --w: min(190px, 46vw); display: grid; place-items: center; height: calc(var(--w) * 5 / 3 + 40px); perspective: 1000px; margin-bottom: 8px; overflow: hidden; }
   .app-name { font-size: clamp(40px, 11vw, 56px); }
 
   .pcard { grid-template-columns: 1fr; min-height: 0; position: relative; top: auto; gap: 18px; }
