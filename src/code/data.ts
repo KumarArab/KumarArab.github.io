@@ -21,7 +21,7 @@ export const profile = {
 export const facts = [
   { value: 5, suffix: ' yrs', label: 'shipping Flutter & Android apps' },
   { value: 4, suffix: '', label: 'fintechs: Moniepoint, CRED, Uni, Fello' },
-  { value: 10, suffix: 'K+', label: 'downloads on Cabo, my own game' },
+  { value: 50, suffix: 'K+', label: 'downloads on Cabo, my own game' },
   { value: 150, suffix: '+', label: 'GitHub stars on open-source Flutter UI' },
 ];
 
@@ -79,7 +79,7 @@ export const apps: App[] = [
       { label: 'App Store', url: 'https://apps.apple.com/in/app/cabo-multiplayer-card-game/id6450954310', kind: 'appstore' },
       { label: 'Engineering blog', url: 'https://cabo-engineering.web.app', kind: 'blog' },
     ],
-    metrics: [{ value: '10K+', label: 'downloads' }, { value: '4.1★', label: 'App Store' }, { value: '4', label: 'games in one app' }],
+    metrics: [{ value: '50K+', label: 'downloads' }, { value: '4.1★', label: 'App Store' }, { value: '4', label: 'games in one app' }],
     stack: ['Flutter', 'Node.js', 'Firebase', 'WebSockets', 'AdMob mediation', 'Mixpanel'],
     screens: ['/work/cabo/1.webp', '/work/cabo/2.webp', '/work/cabo/3.webp', '/work/cabo/4.webp', '/work/cabo/5.webp'], icon: '/work/cabo/icon.webp',
   },
