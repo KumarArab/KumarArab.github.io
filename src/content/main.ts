@@ -1,6 +1,6 @@
 import '../styles/content.css';
 import { initPaletteChips } from '../lib/palette';
-import { gsap, ScrollTrigger, SplitText, getLenis, initSmoothScroll, initCounters, initCursor, initMagnetic, revealLines, reduceMotion } from '../lib/motion';
+import { gsap, ScrollTrigger, SplitText, getLenis, initSmoothScroll, initCounters, onceVisible, initCursor, initMagnetic, revealLines, reduceMotion } from '../lib/motion';
 import { curtainIn, initTransitions } from '../lib/transition';
 import { initClock } from '../lib/clock';
 import { buildArt } from '../landing/art';
@@ -188,21 +188,21 @@ if (!RM) {
   });
 
   // audience bars grow, cards rise
-  gsap.from('.aud-card', { y: 90, autoAlpha: 0, stagger: 0.12, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: '.aud-grid', start: 'top 80%', once: true } });
-  gsap.from('.bar i', { scaleX: 0, duration: 1.4, ease: 'expo.out', stagger: 0.06, scrollTrigger: { trigger: '.aud-grid', start: 'top 70%', once: true } });
+  onceVisible($('.aud-grid'), () => gsap.from('.aud-card', { y: 90, autoAlpha: 0, stagger: 0.12, duration: 1.1, ease: 'expo.out' }));
+  onceVisible($('.aud-grid'), () => gsap.from('.bar i', { scaleX: 0, duration: 1.4, ease: 'expo.out', stagger: 0.06 }));
 
-  gsap.from('.why-item', { y: 100, autoAlpha: 0, stagger: 0.15, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: '.why-list', start: 'top 80%', once: true } });
+  onceVisible($('.why-list'), () => gsap.from('.why-item', { y: 100, autoAlpha: 0, stagger: 0.15, duration: 1.1, ease: 'expo.out' }));
 
   // brand chips fly in from scattered spots
-  gsap.from('.fit-cloud span', {
+  onceVisible($('.fit'), () => gsap.from('.fit-cloud span', {
     x: () => gsap.utils.random(-260, 260), y: () => gsap.utils.random(80, 220), rotate: () => gsap.utils.random(-25, 25), autoAlpha: 0,
-    duration: 1.2, ease: 'expo.out', stagger: 0.05, scrollTrigger: { trigger: '.fit', start: 'top 70%', once: true },
-  });
-  gsap.from('.collab', { y: 120, rotate: (i: number) => (i - 1) * 5, autoAlpha: 0, stagger: 0.12, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: '.collab-list', start: 'top 80%', once: true } });
-  gsap.from('.svc', { xPercent: 12, autoAlpha: 0, stagger: 0.08, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: '.svc-list', start: 'top 80%', once: true } });
+    duration: 1.2, ease: 'expo.out', stagger: 0.05,
+  }));
+  onceVisible($('.collab-list'), () => gsap.from('.collab', { y: 120, rotate: (i: number) => (i - 1) * 5, autoAlpha: 0, stagger: 0.12, duration: 1.1, ease: 'expo.out' }));
+  onceVisible($('.svc-list'), () => gsap.from('.svc', { xPercent: 12, autoAlpha: 0, stagger: 0.08, duration: 1, ease: 'expo.out' }));
 
   revealLines('.sec-head h2, .book-title');
-  gsap.from('.crossover', { y: 120, autoAlpha: 0, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: '.crossover', start: 'top 90%', once: true } });
+  onceVisible($('.crossover'), () => gsap.from('.crossover', { y: 120, autoAlpha: 0, duration: 1.2, ease: 'expo.out' }));
 }
 
 // section nav highlight (after pins, so positions include pin spacing)
@@ -216,4 +216,5 @@ $$<HTMLAnchorElement>('.secnav a').forEach(a => {
 ScrollTrigger.create({ trigger: '.numbers', start: 'top 40px', end: 'bottom 40px', toggleClass: { targets: document.body, className: 'dark-zone' } });
 
 document.fonts?.ready.then(() => ScrollTrigger.refresh());
+addEventListener('load', () => ScrollTrigger.refresh());
 curtainIn();

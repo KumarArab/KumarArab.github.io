@@ -40,18 +40,6 @@ $('[data-xp]').innerHTML = experience.map(r => `
 $('[data-xp-nodes]').innerHTML = experience.map(() => '<li></li>').join('');
 
 /* ---------- apps ---------- */
-// used only when an app has no screenshots yet
-const TINTS: Record<string, [string, string, string]> = {
-  cabo: ['#FF6B6B', '#FFD166', '#1B1B3A'],
-  matrix: ['#00C2A8', '#3D5AFE', '#081226'],
-  paperid: ['#F7B267', '#F25C54', '#2B1B17'],
-};
-function screenHTML(a: App) {
-  if (a.screens.length) return `<div class="screen"><img src="${a.screens[0]}" alt="${esc(a.name)} on the store" loading="lazy"></div>`;
-  const [x, y, z] = TINTS[a.id] ?? ['#888', '#444', '#111'];
-  return `<div class="screen"><div class="screen-ph" style="--ph-a:${x};--ph-b:${y};--ph-c:${z}">
-    <div class="icon">${esc(a.name[0])}</div><b>${esc(a.name)}</b><span>${esc(a.kind)}<br>screens coming soon</span></div></div>`;
-}
 const linkHTML = (l: App['links'][number]) => {
   const icon = l.kind === 'appstore' ? ICON.appstore : l.kind === 'play' ? ICON.play : l.kind === 'blog' ? ICON.blog : l.kind === 'github' ? ICON.github : ICON.web;
   const secondary = l.kind === 'blog' || l.kind === 'github';
@@ -59,6 +47,7 @@ const linkHTML = (l: App['links'][number]) => {
 };
 $('[data-apps-copy]').innerHTML = apps.map((a, i) => `
   <article class="app-copy" data-i="${i}">
+    ${a.screens[0] ? `<img class="app-shot-m" src="${a.screens[0]}" alt="${esc(a.name)} on the store" loading="lazy">` : ''}
     <p class="app-kind">${String(i + 1).padStart(2, '0')} / ${String(apps.length).padStart(2, '0')} · ${esc(a.kind)}</p>
     <h3 class="app-name">${a.icon ? `<img class="app-icon" src="${a.icon}" alt="">` : ''}${esc(a.name)}</h3>
     <p class="app-line">${esc(a.line)}</p>
@@ -67,18 +56,8 @@ $('[data-apps-copy]').innerHTML = apps.map((a, i) => `
     <div class="app-links">${a.links.map(linkHTML).join('')}</div>
     <div class="xp-stack">${a.stack.map(s => `<span class="chip">${esc(s)}</span>`).join('')}</div>
   </article>`).join('');
-$('[data-apps-index]').innerHTML = apps.map(a => `<li>${esc(a.name)}</li>`).join('');
-const faces = { front: $('[data-face="front"]'), back: $('[data-face="back"]') };
-const faceIdx = { front: -1, back: -1 };
-function setFace(which: 'front' | 'back', i: number) {
-  i = Math.max(0, Math.min(apps.length - 1, i));
-  if (faceIdx[which] === i) return;
-  faceIdx[which] = i;
-  faces[which].innerHTML = screenHTML(apps[i]);
-  faces[which].classList.toggle('is-shot', apps[i].screens.length > 0);
-}
-setFace('front', 0);
-setFace('back', 1);
+// the sticky phone holds one screenshot per app and crossfades between them
+$('[data-phone]').innerHTML = apps.map((a, i) => `<img src="${a.screens[0] ?? a.icon ?? ''}" alt="${esc(a.name)} on the store" class="${i === 0 ? 'is-on' : ''}" loading="${i === 0 ? 'eager' : 'lazy'}">`).join('');
 
 /* ---------- products ---------- */
 $('[data-products]').innerHTML = products.map((p, i) => `
@@ -127,8 +106,8 @@ playList.addEventListener('click', e => {
   if (!b) return;
   const i = +b.dataset.game!;
   if (i === playIdx && playLoaded) return;
-  if (!RM) gsap.fromTo('.phone-shell', { rotateY: -12, scale: .96 }, { rotateY: 0, scale: 1, duration: .7, ease: 'expo.out' });
   loadGame(i);
+  playCover.classList.add('is-off');
 });
 playCover.addEventListener('click', () => {
   if (!playLoaded) loadGame(playIdx);
@@ -142,7 +121,7 @@ function commVisual(c: (typeof community)[number]) {
     return `<img class="avatar" src="/work/github-avatar.webp" alt="" loading="lazy">
       <img class="chart" src="https://ghchart.rshah.org/KumarArab" alt="GitHub contributions chart" loading="lazy" onerror="this.remove()">`;
   }
-  if (c.kind === 'blog') return `<iframe data-src="${c.url}" title="Cabo engineering blog preview" loading="lazy" tabindex="-1"></iframe>`;
+  if (c.kind === 'blog') return `<img class="shot" src="/work/products/cabo-blog.webp" alt="Cabo engineering blog" loading="lazy">`;
   return ICON[c.kind];
 }
 $('[data-comm]').insertAdjacentHTML('beforeend', community.map(c => `
@@ -166,22 +145,24 @@ $('[data-email]').addEventListener('click', async () => {
   location.href = `mailto:${profile.email}?subject=${encodeURIComponent('Hello from arabkumar.in')}`;
 });
 
-/* ---------- live iframes: load when near, scale desktop layout into the frame ---------- */
-function fitFrames() {
-  $$<HTMLIFrameElement>('.browser-view iframe').forEach(f => { f.style.transform = `scale(${f.parentElement!.clientWidth / 1280})`; });
-  $$<HTMLIFrameElement>('.ccard-visual iframe').forEach(f => { f.style.transform = `scale(${f.parentElement!.clientWidth / 1100})`; });
-}
+/* ---------- live previews: each site renders at a fixed 1280 × 800 and is scaled to fit its frame ---------- */
+const fit = new ResizeObserver(entries => entries.forEach(en => {
+  const f = en.target.querySelector('iframe');
+  if (f) f.style.transform = `scale(${en.contentRect.width / 1280})`;
+}));
+$$('.browser-view').forEach(v => fit.observe(v));
 const io = new IntersectionObserver(entries => entries.forEach(en => {
   if (!en.isIntersecting) return;
   const f = en.target as HTMLIFrameElement;
-  if (f.dataset.src) { f.src = f.dataset.src; delete f.dataset.src; }
+  if (f.dataset.src) {
+    f.addEventListener('load', () => f.classList.add('is-loaded'), { once: true });
+    f.src = f.dataset.src; delete f.dataset.src;
+  }
   if (f === playFrame && !playLoaded) loadGame(0);
   io.unobserve(f);
-}), { rootMargin: '600px 600px' });
+}), { rootMargin: '400px 0px' });
 $$<HTMLIFrameElement>('iframe[data-src]').forEach(f => io.observe(f));
 io.observe(playFrame);
-fitFrames();
-addEventListener('resize', fitFrames);
 
 /* ---------- motion ---------- */
 initSmoothScroll();
@@ -192,103 +173,42 @@ initClock();
 initTransitions();
 
 
+// Nothing below hides content until an animation fires, so a missed trigger can never leave a blank card.
 if (!RM) {
-  // hero: one calm entrance, then it quietly steps back as you scroll
+  // hero: one calm entrance on load
   gsap.from('.status, .hero-grid > *, .hero-foot', { y: 24, autoAlpha: 0, duration: 1.1, ease: 'expo.out', stagger: 0.08, delay: 1.1 });
   gsap.from('.spec div', { autoAlpha: 0, x: -12, duration: 0.8, ease: 'expo.out', stagger: 0.06, delay: 1.3 });
-  gsap.to('.hero', { autoAlpha: 0.15, yPercent: -6, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'center top', end: 'bottom top', scrub: true } });
 
-  // experience: one role in focus at a time
-  const cards = $$('.xp-card');
-  const nodes = $$('.xp-rail li');
-  gsap.set(cards.slice(1), { autoAlpha: 0, y: 80 });
-  const xpTl = gsap.timeline({
-    onUpdate() { const p = this.progress(); nodes.forEach((n, i) => n.classList.toggle('is-on', p >= i / Math.max(1, cards.length - 1) * 0.85 - 0.02)); },
-    scrollTrigger: { trigger: '.xp .pin', pin: true, start: 'top top', end: () => `+=${cards.length * innerHeight * 0.9}`, scrub: 0.8 },
-  });
-  xpTl.to('.xp-fill', { scaleY: 1, ease: 'none', duration: cards.length }, 0);
-  cards.forEach((c, i) => {
-    if (i === 0) return;
-    xpTl.to(cards[i - 1], { autoAlpha: 0, y: -80, scale: 0.96, duration: 0.3 }, i - 0.6)
-      .to(c, { autoAlpha: 1, y: 0, duration: 0.4 }, i - 0.28);
-  });
-  xpTl.to({}, { duration: 0.4 });
+  // experience: the rail fills as you read down the list
+  gsap.fromTo('.xp-fill', { scaleY: 0 }, { scaleY: 1, ease: 'none', scrollTrigger: { trigger: '.xp-list', start: 'top 60%', end: 'bottom 60%', scrub: true } });
 
-  // apps: the phone flips to each app while the copy swaps
-  const copies = $$('.app-copy');
-  const index = $$('.apps-index li');
-  const word = $('[data-apps-word]');
-  gsap.set(copies.slice(1), { autoAlpha: 0, y: 60 });
-  const phone = $('[data-phone]');
-  const n = apps.length;
-  const syncPhone = () => {
-    const r = (gsap.getProperty(phone, 'rotateY') as number) / 180;
-    setFace('front', 2 * Math.round(r / 2));
-    setFace('back', 2 * Math.floor((r + 0.5) / 2) + 1);
-    const cur = Math.max(0, Math.min(n - 1, Math.round(r)));
-    index.forEach((li, i) => li.classList.toggle('is-on', i === cur));
-    if (word.dataset.i !== String(cur)) { word.dataset.i = String(cur); word.textContent = `${apps[cur].name} · ${apps[cur].name} · ${apps[cur].name}`; }
-  };
-  // runs on every rendered frame of the (smoothed) timeline, so the screen always matches the flip
-  const appsTl = gsap.timeline({
-    onUpdate: syncPhone,
-    scrollTrigger: { trigger: '.apps .pin', pin: true, start: 'top top', end: () => `+=${n * innerHeight}`, scrub: 0.8 },
-  });
-  syncPhone();
-  appsTl.fromTo(phone, { rotateY: -18, rotateX: 8 }, { rotateY: 0, rotateX: 0, duration: 0.3, ease: 'power2.out' }, 0);
-  for (let i = 1; i < n; i++) {
-    appsTl.to(phone, { rotateY: i * 180, duration: 0.7, ease: 'power2.inOut' }, i - 0.5)
-      .to(copies[i - 1], { autoAlpha: 0, y: -60, duration: 0.35 }, i - 0.5)
-      .to(copies[i], { autoAlpha: 1, y: 0, duration: 0.4 }, i - 0.2);
-  }
-  appsTl.fromTo(word, { xPercent: 0 }, { xPercent: -30, ease: 'none', duration: n }, 0);
-  appsTl.to({}, { duration: 0.3 });
-
-  // products: each card stacks over the last, which recedes
-  const pcards = $$('.pcard');
-  pcards.forEach((c, i) => {
-    const next = pcards[i + 1];
-    gsap.from(c.children, { y: 60, autoAlpha: 0, duration: 1, ease: 'expo.out', stagger: 0.1, scrollTrigger: { trigger: c, start: 'top 80%', once: true } });
-    if (!next) return;
-    gsap.to(c, { scale: 0.92, filter: 'brightness(.55)', ease: 'none', scrollTrigger: { trigger: next, start: 'top bottom', end: 'top 20%', scrub: true } });
-  });
-
-  // playables: the phone rises into place, PLAY scrolls behind it
-  gsap.from('.phone-shell', { y: 160, rotateX: 28, scale: 0.85, ease: 'none', transformPerspective: 1200, scrollTrigger: { trigger: '.play', start: 'top bottom', end: 'top 20%', scrub: true } });
-  gsap.from('.play-item', { x: -60, autoAlpha: 0, stagger: 0.1, duration: 0.9, ease: 'expo.out', scrollTrigger: { trigger: '.play-list', start: 'top 80%', once: true } });
-  gsap.fromTo('.play-word', { xPercent: 0 }, { xPercent: -35, ease: 'none', scrollTrigger: { trigger: '.play', start: 'top bottom', end: 'bottom top', scrub: true } });
-
-  // community: vertical scroll drives a horizontal track; the centred card is in focus
-  const track = $('[data-comm]');
-  const dist = () => track.scrollWidth - innerWidth;
-  const hTween = gsap.to(track, {
-    x: () => -dist(), ease: 'none',
-    scrollTrigger: { trigger: '.community .pin', pin: true, start: 'top top', end: () => `+=${dist()}`, scrub: 0.8, invalidateOnRefresh: true },
-  });
-  $$('.ccard').forEach(card => {
-    gsap.timeline({ scrollTrigger: { trigger: card, containerAnimation: hTween, start: 'left right', end: 'right left', scrub: true } })
-      .fromTo(card, { scale: 0.84, autoAlpha: 0.35, rotate: 3 }, { scale: 1, autoAlpha: 1, rotate: 0, duration: 0.5, ease: 'power1.out' })
-      .to(card, { scale: 0.84, autoAlpha: 0.35, rotate: -3, duration: 0.5, ease: 'power1.in' });
-  });
-
-  // stack rows slide in opposite directions
+  // stack rows drift in opposite directions
   $$('.srow').forEach((row, i) => {
     gsap.fromTo(row, { xPercent: i % 2 ? -30 : 0 }, { xPercent: i % 2 ? 0 : -30, ease: 'none', scrollTrigger: { trigger: '.stackrows', start: 'top bottom', end: 'bottom top', scrub: true } });
   });
 
-  // headlines
-  revealLines('.sec-head--flow h2, .contact-title, .comm-intro h2, .play .sec-head h2');
-  gsap.from('.crossover', { y: 120, autoAlpha: 0, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: '.crossover', start: 'top 90%', once: true } });
+  revealLines('.sec-head h2, .contact-title');
 }
 
-// section nav highlight
-$$<HTMLAnchorElement>('.secnav a').forEach(a => {
-  const sec = document.querySelector(a.getAttribute('href')!);
-  if (!sec) return;
-  ScrollTrigger.create({ trigger: sec, start: 'top 55%', end: 'bottom 45%', onToggle: s => a.classList.toggle('is-active', s.isActive) });
-});
+// the item nearest the middle of the screen is "on" (experience roles, apps); pure class toggles
+const nodes = $$('.xp-rail li');
+$$('.xp-card').forEach((card, i) => ScrollTrigger.create({
+  trigger: card, start: 'top 65%', end: 'bottom 35%',
+  onToggle: s => { card.classList.toggle('is-on', s.isActive); if (s.isActive) nodes.forEach((n, j) => n.classList.toggle('is-on', j <= i)); },
+}));
+const shots = $$('[data-phone] img');
+$$('.app-copy').forEach((copy, i) => ScrollTrigger.create({
+  trigger: copy, start: 'top 55%', end: 'bottom 45%',
+  onToggle: s => {
+    copy.classList.toggle('is-on', s.isActive);
+    if (s.isActive) shots.forEach((img, j) => img.classList.toggle('is-on', j === i));
+  },
+}));
+$$('.xp-card')[0]?.classList.add('is-on');
+$$('.app-copy')[0]?.classList.add('is-on');
 
 // wait for fonts so pinned heights and split lines are measured correctly
 document.fonts?.ready.then(() => ScrollTrigger.refresh());
+addEventListener('load', () => ScrollTrigger.refresh());
 revealLines('.hero-title', { immediate: true, delay: 0.85 });
 curtainIn();
