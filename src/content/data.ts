@@ -23,10 +23,9 @@ export interface Pillar { name: string; line: string; formats: string; image?: s
 
 // image: reel cover in /public/creator/reels/; reel: optional short muted mp4 that plays instead
 export const pillars: Pillar[] = [
-  { name: 'Office humour', line: 'Job hunts, standups and Mondays, from someone who is actually in them.', formats: 'Reels · POVs · Skits', reel: '/creator/reels/DWQWjtdTdFz.mp4', image: '/creator/reels/DWQWjtdTdFz.webp', link: 'https://www.instagram.com/p/DWQWjtdTdFz/', tint: ['#FF5F6D', '#FFC371'], icon: 'laugh' },
-  { name: 'Fits', line: 'Workday outfits for people in tech who still want to look good.', formats: 'Posts · Fit checks · Carousels', image: '/creator/reels/DZSS2A1PdRy.webp', link: 'https://www.instagram.com/p/DZSS2A1PdRy/', tint: ['#8E7CFF', '#F4B8FF'], icon: 'hanger' },
-  { name: 'Tech life', line: '1:30 AM deploys, crashed laptops and the chaos of building things.', formats: 'Reels · Skits · Talking heads', reel: '/creator/reels/DXLnub1D5Px.mp4', image: '/creator/reels/DXLnub1D5Px.webp', link: 'https://www.instagram.com/p/DXLnub1D5Px/', tint: ['#00B4DB', '#9CFFCE'], icon: 'mic' },
-  { name: 'Dance', line: 'Class videos and freestyle clips, wherever there is floor space.', formats: 'Reels · Class videos · Trends', image: '/creator/reels/DNIuO3APQ05.webp', link: 'https://www.instagram.com/p/DNIuO3APQ05/', tint: ['#F7971E', '#FFD200'], icon: 'dance' },
+  { name: 'Relatable humour', line: 'Job hunts, standups and Mondays, from someone who is actually in them.', formats: 'Reels · POVs · Skits', reel: '/creator/reels/DWQWjtdTdFz.mp4', image: '/creator/reels/DWQWjtdTdFz.webp', link: 'https://www.instagram.com/p/DWQWjtdTdFz/', tint: ['#FF5F6D', '#FFC371'], icon: 'laugh' },
+  { name: 'Fashion', line: 'Workday outfits for people in tech who still want to look good.', formats: 'Posts · Fit checks · Carousels', image: '/creator/reels/DZSS2A1PdRy.webp', link: 'https://www.instagram.com/p/DZSS2A1PdRy/', tint: ['#8E7CFF', '#F4B8FF'], icon: 'hanger' },
+  { name: 'Tech', line: '1:30 AM deploys, crashed laptops and the chaos of building things.', formats: 'Reels · Skits · Talking heads', reel: '/creator/reels/DXLnub1D5Px.mp4', image: '/creator/reels/DXLnub1D5Px.webp', link: 'https://www.instagram.com/p/DXLnub1D5Px/', tint: ['#00B4DB', '#9CFFCE'], icon: 'mic' },
 ];
 
 /** The reel that plays in the hero. */
@@ -75,6 +74,5 @@ export const services = [
   { name: 'Reel', detail: 'A concept, shot and edited by me, posted on @flipsidefolly.' },
   { name: 'Story set', detail: '3–5 stories with a link sticker, for launches and offers.' },
   { name: 'Fit check', detail: 'Your product styled into a real workday outfit.' },
-  { name: 'Dance trend', detail: 'Choreography for your song, product or campaign.' },
   { name: 'Events', detail: 'Appearances, launches and live coverage in Bengaluru.' },
 ];

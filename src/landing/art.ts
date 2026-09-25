@@ -24,7 +24,7 @@ const ICONS: Record<string, string> = {
 
 const SETS = {
   content: { icons: ['ig', 'yt', 'cam', 'heart', 'chat', 'mic', 'spark', 'reel', 'hanger', 'shoe'],
-    words: ['hit record', '#reels', 'POV:', 'link in bio', 'take 7', '5, 6, 7, 8!', 'fit check', 'yap session', 'swipe →'] },
+    words: ['hit record', '#reels', 'POV:', 'link in bio', 'take 7', 'ootd', 'fit check', 'yap session', 'swipe →'] },
   code: { icons: ['in', 'tag', 'term', 'git', 'phone', 'bug', 'flutter'],
     words: ['git push origin main', 'flutter run', '200 OK', 'if (bug) fix();', '// TODO: sleep', 'setState(() {})', '{ }', '=>', 'await ship();', 'pubspec.yaml'] },
 };
