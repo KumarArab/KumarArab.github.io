@@ -48,7 +48,7 @@ function resize() {
   const dpr = Math.min(devicePixelRatio || 1, 2);
   W = innerWidth; H = innerHeight;
   horiz = !(W <= 760 && H > W);
-  brainSize = horiz ? Math.min(W * 0.3, H * 0.46, 460) : Math.min(W * 0.62, H * 0.3);
+  brainSize = horiz ? Math.min(W * 0.3, H * 0.46, 460) : Math.min(W * 0.56, H * 0.26);
   stage.style.setProperty('--brain', `${brainSize}px`);
   liquid.width = W * dpr; liquid.height = H * dpr;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);

@@ -55,23 +55,27 @@ body.landing { overflow: hidden; background: var(--content-bg); }
 .content-layer .cta { background: var(--content-ink); color: var(--content-bg); font: italic 400 26px/1 var(--serif); padding: 16px 30px; }
 .code-layer .cta { background: var(--code-accent); color: var(--code-bg); }
 
-/* phones in portrait: split top / bottom, brain in the middle */
+/* phones in portrait: split top / bottom, brain in the middle.
+   Each block hugs the edge away from the brain, and only the essentials show, so nothing can overlap. */
 @media (max-width: 760px) and (orientation: portrait) {
-  .block { left: 0 !important; right: 0; width: auto; height: calc((100% - var(--brain)) / 2); gap: 12px; padding-top: 44px; }
-  .block[data-side="code"] { top: 0; bottom: auto; }
-  .block[data-side="content"] { top: auto; bottom: 0; padding-top: 0; padding-bottom: 52px; }
-  .content-layer .side-title { font-size: 64px; }
-  .code-layer .side-title { font-size: 52px; }
-  .block p { font-size: 13px !important; max-width: 34ch; }
-  .content-layer .block p { font-size: 18px !important; }
-  .eyebrow { display: none; }
-  .links { font-size: 12px; }
-  .btn.cta { padding: 14px 22px; font-size: 14px; }
-  .content-layer .cta { font-size: 21px; padding: 12px 24px; }
-  .brain-label { display: none; }
-  .foot { grid-template-columns: auto 1fr; }
-  .router { display: none; }
-  .foot-links { gap: 14px; }
+  .block { left: 0 !important; right: 0; width: auto; height: calc((100% - var(--brain)) / 2); gap: 10px; padding-inline: 20px; }
+  .block[data-side="code"] { top: 0; bottom: auto; place-content: start center; padding-top: calc(env(safe-area-inset-top, 0px) + 64px); }
+  .block[data-side="content"] { top: auto; bottom: 0; place-content: end center; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 64px); }
+  .eyebrow, .block .links, .brain-label, .router { display: none; }
+  .code-layer .side-title { font-size: clamp(36px, 11vw, 48px); }
+  .content-layer .side-title { font-size: clamp(46px, 14vw, 60px); }
+  .code-layer .block p { font-size: 12px; line-height: 1.5; max-width: 30ch; }
+  .content-layer .block p { font-size: 17px; line-height: 1.2; max-width: 26ch; }
+  .btn.cta { padding: 12px 20px; font-size: 13px; margin-top: 2px; }
+  .content-layer .cta { font-size: 19px; padding: 10px 22px; }
+  .bar { top: calc(env(safe-area-inset-top, 0px) + 16px); }
+  .bar b { font-size: 16px; }
+  .foot { grid-template-columns: auto 1fr; bottom: calc(env(safe-area-inset-bottom, 0px) + 14px); gap: 10px; }
+  .foot-links { gap: 14px; font-size: 11px; }
+}
+/* short phones: drop the one-liners too */
+@media (max-width: 760px) and (orientation: portrait) and (max-height: 640px) {
+  .block p { display: none; }
 }
 
 @media (max-height: 560px) and (orientation: landscape) {

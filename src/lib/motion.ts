@@ -28,6 +28,19 @@ export function initSmoothScroll(): Lenis | null {
 
 export const getLenis = () => lenis;
 
+/**
+ * Runs `fn` once, the first time `el` enters the viewport. Uses IntersectionObserver rather than
+ * scroll positions, so it still fires correctly when images or fonts shift the layout after load.
+ */
+export function onceVisible(el: Element, fn: () => void, rootMargin = '0px 0px -10% 0px') {
+  const io = new IntersectionObserver(entries => {
+    if (!entries.some(e => e.isIntersecting)) return;
+    io.disconnect();
+    fn();
+  }, { rootMargin });
+  io.observe(el);
+}
+
 /** Counts a number up from 0 when it scrolls into view. Reads data-count (+ optional data-suffix). */
 export function initCounters(scope: ParentNode = document) {
   scope.querySelectorAll<HTMLElement>('[data-count]').forEach(el => {
@@ -37,20 +50,20 @@ export function initCounters(scope: ParentNode = document) {
     const obj = { v: 0 };
     const set = () => { el.textContent = obj.v.toFixed(dec) + suffix; };
     if (reduceMotion()) { obj.v = end; set(); return; }
-    set();
-    gsap.to(obj, { v: end, duration: 1.8, ease: 'power3.out', onUpdate: set, scrollTrigger: { trigger: el, start: 'top bottom', once: true } });
+    // the final value stays in the markup until the count actually starts
+    onceVisible(el, () => { set(); gsap.to(obj, { v: end, duration: 1.8, ease: 'power3.out', onUpdate: set }); }, '0px');
   });
 }
 
-/** Headline reveal: lines rise out of a mask when they enter the viewport. */
+/** Headline reveal: lines rise out of a mask the first time they come into view. */
 export function revealLines(selector: string, opts: { delay?: number; immediate?: boolean } = {}) {
   document.querySelectorAll<HTMLElement>(selector).forEach(el => {
     if (reduceMotion()) return;
-    const split = SplitText.create(el, { type: 'lines', mask: 'lines', linesClass: 'line' });
-    gsap.from(split.lines, {
-      yPercent: 110, duration: 1.1, ease: 'expo.out', stagger: 0.09, delay: opts.delay ?? 0,
-      scrollTrigger: opts.immediate ? undefined : { trigger: el, start: 'top 85%', once: true },
-    });
+    const run = () => {
+      const split = SplitText.create(el, { type: 'lines', mask: 'lines', linesClass: 'line' });
+      gsap.from(split.lines, { yPercent: 110, duration: 1.1, ease: 'expo.out', stagger: 0.09, delay: opts.delay ?? 0 });
+    };
+    if (opts.immediate) run(); else onceVisible(el, run);
   });
 }
 
