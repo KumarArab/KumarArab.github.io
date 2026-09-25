@@ -129,6 +129,18 @@ body.dark-zone .secnav a.is-active { background: var(--content-bg); color: var(-
 .reel-ui, .reel-handle { z-index: 3; }
 .aud-note { font: 400 20px/1.25 var(--serif); }
 
+/* "tap for sound" badge on reels */
+.reel-play { position: absolute; z-index: 3; left: 50%; top: 14px; transform: translateX(-50%); padding: 6px 10px; border-radius: 999px; background: rgba(0,0,0,.55); color: #fff; font: 600 10px/1 var(--mono); letter-spacing: .06em; white-space: nowrap; }
+
+/* Instagram player lightbox */
+.ig-player { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 16px; background: rgba(0,0,0,.72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.ig-player[hidden] { display: none; }
+.ig-box { position: relative; display: grid; gap: 10px; justify-items: center; }
+.ig-box iframe { width: min(400px, 92vw); height: min(720px, 80svh); border: 0; border-radius: 18px; background: #fff; }
+.ig-close { position: absolute; top: -14px; right: -14px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: #fff; color: #111; font: 400 26px/1 var(--mono); cursor: pointer; }
+.ig-open { color: #fff; font: 500 13px/1 var(--mono); }
+html.is-locked { overflow: hidden; }
+
 /* why it works */
 .why { padding: 12vh var(--gutter); display: grid; gap: 6vh; }
 .why-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(18px, 3vw, 44px); }

@@ -165,6 +165,7 @@ section { position: relative; }
   background: color-mix(in srgb, var(--code-bg) 55%, transparent); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
   font: 800 28px/1 var(--display); color: var(--code-ink); transition: opacity .4s; }
 .play-cover.is-off { opacity: 0; pointer-events: none; }
+.play-dash { justify-self: start; font: 500 13px/1 var(--mono); color: var(--code-accent); }
 .play-open { font: 500 12px/1 var(--mono); opacity: .75; }
 
 /* ---------- community: horizontal track ---------- */

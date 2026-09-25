@@ -35,8 +35,9 @@ const CODE: [string, string?][] = [
   ['// arab.dart\n', 'c'],
   ['class ', 'k'], ['Arab ', ''], ['extends ', 'k'], ['Developer {\n', ''],
   ['  final ', 'k'], ['role = ', ''], [`'${profile.title}'`, 's'], [';\n', ''],
-  ['  final ', 'k'], ['stack = [', ''], ["'Flutter'", 's'], [', ', ''], ["'Dart'", 's'], [', ', ''], ["'Firebase'", 's'], ['];\n', ''],
-  ['  final ', 'k'], ['shipped = [', ''], ["'Cabo'", 's'], [', ', ''], ["'Matrix'", 's'], [', ', ''], ["'Paperid'", 's'], ['];\n\n', ''],
+  ['  final ', 'k'], ['stack = [', ''], ["'Flutter'", 's'], [', ', ''], ["'Kotlin'", 's'], [', ', ''], ["'Compose'", 's'], ['];\n', ''],
+  ['  final ', 'k'], ['shipped = [', ''], ["'Moniepoint'", 's'], [', ', ''], ["'CRED'", 's'], [', ', ''], ["'Uni'", 's'], [', ', ''], ["'Fello'", 's'], ['];\n', ''],
+  ['  final ', 'k'], ['sideProjects = [', ''], ["'Cabo'", 's'], [', ', ''], ["'Matrix'", 's'], ['];\n\n', ''],
   ['  bool get ', 'k'], ['openToWork => ', ''], ['true', 'k'], [';\n\n', ''],
   ['  void ', 'k'], ['everyDay() => post(', ''], ["'linkedin'", 's'], [');\n}', ''],
 ];
@@ -241,8 +242,8 @@ if (!RM) {
   xpTl.to('.xp-fill', { scaleY: 1, ease: 'none', duration: cards.length }, 0);
   cards.forEach((c, i) => {
     if (i === 0) return;
-    xpTl.to(cards[i - 1], { autoAlpha: 0, y: -80, scale: 0.96, duration: 0.5 }, i - 0.6)
-      .to(c, { autoAlpha: 1, y: 0, duration: 0.5 }, i - 0.35);
+    xpTl.to(cards[i - 1], { autoAlpha: 0, y: -80, scale: 0.96, duration: 0.3 }, i - 0.6)
+      .to(c, { autoAlpha: 1, y: 0, duration: 0.4 }, i - 0.28);
   });
   xpTl.to({}, { duration: 0.4 });
 

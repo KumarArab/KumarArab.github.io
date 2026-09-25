@@ -23,14 +23,17 @@ export interface Pillar { name: string; line: string; formats: string; image?: s
 
 // image: reel cover in /public/creator/reels/; reel: optional short muted mp4 that plays instead
 export const pillars: Pillar[] = [
-  { name: 'Office humour', line: 'Standups, managers and Mondays, from someone who is actually in them.', formats: 'Reels · POVs · Skits', image: '/creator/reels/DZ2nvr_TDbr.webp', link: 'https://www.instagram.com/p/DZ2nvr_TDbr/', tint: ['#FF5F6D', '#FFC371'], icon: 'laugh' },
-  { name: 'Fits', line: 'Workday outfits for people in tech who still want to look good.', formats: 'Reels · Fit checks · Carousels', image: '/creator/reels/DZm4Egsz5Jx.webp', link: 'https://www.instagram.com/p/DZm4Egsz5Jx/', tint: ['#8E7CFF', '#F4B8FF'], icon: 'hanger' },
-  { name: 'Dance', line: 'Class videos and freestyle clips, wherever there is floor space.', formats: 'Reels · Class videos · Trends', image: '/creator/reels/DNIuO3APQ05.webp', link: 'https://www.instagram.com/p/DNIuO3APQ05/', tint: ['#00B4DB', '#9CFFCE'], icon: 'dance' },
-  { name: 'Bengaluru life', line: 'Cafés, lakes and slow weekends. The life the audience is building too.', formats: 'Reels · Vlogs · Stories', image: '/creator/reels/DZSS2A1PdRy.webp', link: 'https://www.instagram.com/p/DZSS2A1PdRy/', tint: ['#F7971E', '#FFD200'], icon: 'mic' },
+  { name: 'Office humour', line: 'Job hunts, standups and Mondays, from someone who is actually in them.', formats: 'Reels · POVs · Skits', reel: '/creator/reels/DWQWjtdTdFz.mp4', image: '/creator/reels/DWQWjtdTdFz.webp', link: 'https://www.instagram.com/p/DWQWjtdTdFz/', tint: ['#FF5F6D', '#FFC371'], icon: 'laugh' },
+  { name: 'Fits', line: 'Workday outfits for people in tech who still want to look good.', formats: 'Posts · Fit checks · Carousels', image: '/creator/reels/DZSS2A1PdRy.webp', link: 'https://www.instagram.com/p/DZSS2A1PdRy/', tint: ['#8E7CFF', '#F4B8FF'], icon: 'hanger' },
+  { name: 'Tech life', line: '1:30 AM deploys, crashed laptops and the chaos of building things.', formats: 'Reels · Skits · Talking heads', reel: '/creator/reels/DXLnub1D5Px.mp4', image: '/creator/reels/DXLnub1D5Px.webp', link: 'https://www.instagram.com/p/DXLnub1D5Px/', tint: ['#00B4DB', '#9CFFCE'], icon: 'mic' },
+  { name: 'Dance', line: 'Class videos and freestyle clips, wherever there is floor space.', formats: 'Reels · Class videos · Trends', image: '/creator/reels/DNIuO3APQ05.webp', link: 'https://www.instagram.com/p/DNIuO3APQ05/', tint: ['#F7971E', '#FFD200'], icon: 'dance' },
 ];
 
+/** The reel that plays in the hero. */
+export const heroReel = { name: 'Relatable humour', formats: 'Reel', reel: '/creator/reels/DalAzOWPILT.mp4', image: '/creator/reels/DalAzOWPILT.webp', link: 'https://www.instagram.com/p/DalAzOWPILT/', tint: ['#000', '#000'] as [string, string], icon: 'laugh' };
+
 /** Reel covers for the "from the feed" strip. */
-export const feed = ['DOgVOrDj58_', 'DOvbsyGEy5z', 'DME6lnyTluH', 'DOtIDiCk10T', 'DZC06SOz7tQ', 'DZ2nvr_TDbr', 'DNIuO3APQ05', 'DZm4Egsz5Jx', 'DZSS2A1PdRy']
+export const feed = ['DWQWjtdTdFz', 'DXLnub1D5Px', 'DalAzOWPILT', 'DOgVOrDj58_', 'DOvbsyGEy5z', 'DME6lnyTluH', 'DOtIDiCk10T', 'DZC06SOz7tQ', 'DZ2nvr_TDbr', 'DNIuO3APQ05', 'DZm4Egsz5Jx', 'DZSS2A1PdRy']
   .map(id => ({ image: `/creator/reels/${id}.webp`, url: `https://www.instagram.com/p/${id}/` }));
 
 export interface Split { label: string; value: number | null }

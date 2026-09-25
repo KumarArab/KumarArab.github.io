@@ -7,8 +7,8 @@ export interface Metric { value: string; label: string }
 
 export const profile = {
   name: 'Arab Kumar',
-  title: 'Mobile Engineer',
-  focus: 'Flutter',
+  title: 'Senior Mobile Engineer',
+  focus: 'Flutter & Android',
   location: 'Bengaluru, India',
   email: 'arabkumar1000@gmail.com',
   resume: '/resume.pdf',
@@ -17,21 +17,50 @@ export const profile = {
   openToWork: true,
 };
 
-/** Hero counters. Each one is backed by a public source. */
+/** Hero counters. Each one is backed by the resume or a public source. */
 export const facts = [
-  { value: 50, suffix: 'K+', label: 'downloads on Cabo' },
-  { value: 3, suffix: '', label: 'apps live on the App Store & Play Store' },
-  { value: 18, suffix: '', label: 'engineering deep dives published' },
+  { value: 5, suffix: ' yrs', label: 'shipping Flutter & Android apps' },
+  { value: 4, suffix: '', label: 'fintechs: Moniepoint, CRED, Uni, Fello' },
+  { value: 10, suffix: 'K+', label: 'downloads on Cabo, my own game' },
   { value: 150, suffix: '+', label: 'GitHub stars on open-source Flutter UI' },
 ];
 
 export interface Role { role: string; company: string; period: string; points: string[]; stack: string[]; todo?: boolean }
 
-// TODO(arab): replace with the roles from LinkedIn (newest first). LinkedIn needs a login, so this can't be pulled automatically.
+// From the resume + LinkedIn (newest first).
 export const experience: Role[] = [
-  { role: 'Mobile Engineer', company: 'Current company · Bengaluru', period: '20XX — Present', points: ['What you own and ship here.', 'One measurable result (users, speed, revenue, rating).'], stack: ['Flutter', 'Dart'], todo: true },
-  { role: 'Flutter Developer', company: 'Previous company', period: '20XX — 20XX', points: ['What you built.', 'One measurable result.'], stack: ['Flutter', 'Firebase'], todo: true },
-  { role: 'Freelance · The Flutter Guy', company: 'Self-employed', period: '2020 — 20XX', points: ['Apps and websites for colleges, startups and small businesses.', 'Open-sourced dozens of Flutter UI builds and taught them on YouTube.'], stack: ['Flutter', 'Firebase', 'Web'] },
+  {
+    role: 'Senior Mobile Engineer', company: 'Moniepoint Group · Bengaluru, remote', period: 'May 2026 — Present',
+    points: [
+      'Leading the end-to-end migration of the Overdraft module (Business Loans) to a new core app architecture and design system.',
+      'Own the Working Capital Loans module, a core lending product: features, fixes and stability.',
+    ],
+    stack: ['Flutter', 'Clean Architecture', 'Design systems', 'Lending'],
+  },
+  {
+    role: 'Mobile Engineer (Consultant)', company: 'CRED · Bengaluru', period: 'Oct 2025 — Mar 2026',
+    points: [
+      'Migrated the UPI scanner from Flutter to native Jetpack Compose for faster camera start-up and snappier scans.',
+      'Kept Flutter and native layers working as one, with the same UX, across critical payment flows.',
+    ],
+    stack: ['Kotlin', 'Jetpack Compose', 'KMM', 'Flutter'],
+  },
+  {
+    role: 'SDE → SDE II', company: 'Uni Cards · Bengaluru', period: 'Oct 2023 — Sep 2025',
+    points: [
+      'Architected Fixed Deposits and multi-credit-card support, and shipped personal loans and P2P lending.',
+      'Rebuilt the design system (30% fewer visual inconsistencies) and added unit + golden tests (30% fewer regressions).',
+    ],
+    stack: ['Flutter', 'Riverpod', 'System design', 'Golden tests'],
+  },
+  {
+    role: 'Intern → Software Development Engineer', company: 'Fello Finance · Bengaluru', period: 'Jan 2021 — Oct 2023',
+    points: [
+      'Built a gamified investment app that blends payments, skill-based games and rewards.',
+      'Designed a server-driven journey framework and CI/CD for multi-flavour releases, cutting release time by 40%.',
+    ],
+    stack: ['Flutter', 'Firebase', 'Server-driven UI', 'CI/CD'],
+  },
 ];
 
 export interface App {
@@ -44,14 +73,14 @@ export const apps: App[] = [
   {
     id: 'cabo', name: 'Cabo', kind: 'Multiplayer memory games',
     line: 'Remember your cards. Outsmart real players.',
-    detail: 'A real-time PvP card game where memory wins, plus Recall, Trek and WordGrid in one app. Weekly leagues, a daily spin and gems you can redeem for real vouchers. I write about how it is built on the Cabo engineering blog.',
+    detail: 'A real-time PvP card game where memory wins, plus Recall, Trek and WordGrid in one app. Serverless functions handle auth, referrals and rewards; a Node.js server runs live game state and chat. Leagues, streaks, a daily spin and vouchers keep players coming back.',
     links: [
       { label: 'Google Play', url: 'https://play.google.com/store/apps/details?id=com.theflutterguy.kabo&hl=en_IN', kind: 'play' },
       { label: 'App Store', url: 'https://apps.apple.com/in/app/cabo-multiplayer-card-game/id6450954310', kind: 'appstore' },
       { label: 'Engineering blog', url: 'https://cabo-engineering.web.app', kind: 'blog' },
     ],
-    metrics: [{ value: '50K+', label: 'downloads' }, { value: '4.1★', label: 'App Store' }, { value: '4', label: 'games in one app' }],
-    stack: ['Flutter', 'WebSockets', 'Firebase', 'FCM', 'Modular architecture'],
+    metrics: [{ value: '10K+', label: 'downloads' }, { value: '4.1★', label: 'App Store' }, { value: '4', label: 'games in one app' }],
+    stack: ['Flutter', 'Node.js', 'Firebase', 'WebSockets', 'AdMob mediation', 'Mixpanel'],
     screens: ['/work/cabo/1.webp', '/work/cabo/2.webp', '/work/cabo/3.webp'], icon: '/work/cabo/icon.webp',
   },
   {
@@ -92,7 +121,12 @@ export const products: Product[] = [
 
 export interface Playable { name: string; line: string; url: string }
 
-// TODO(arab): who were these built for? (Playform?)
+// HTML5 playable ads for Meta & Google Ads, built at Playform Labs
+export const playablesInfo = {
+  dashboard: 'https://playformlabsadvertiserdashboard.netlify.app/login',
+  points: ['Customisable HTML5 ads that run inside Meta and Google Ads', 'A modular analytics SDK for every playable', 'An advertiser dashboard for interactions and conversions', 'Smaller bundles with sprite sheets, font subsetting and FFmpeg video compression'],
+};
+
 export const playables: Playable[] = [
   { name: 'Juice Merge', line: 'Drop fruit, merge juices, chase the combo.', url: 'https://juice-merge.netlify.app/' },
   { name: 'Story Quiz', line: 'A story you play by answering.', url: 'https://playformstoryquiz.netlify.app/' },
@@ -102,7 +136,7 @@ export const playables: Playable[] = [
 export interface Channel { name: string; handle: string; line: string; url: string; kind: 'linkedin' | 'youtube' | 'instagram' | 'github' | 'blog'; cta: string; stat?: string }
 
 export const community: Channel[] = [
-  { name: 'LinkedIn', handle: 'Arab Kumar', line: 'An informative post on Flutter and building products, every single day.', url: 'https://www.linkedin.com/in/arab-kumar-b5853b191/', kind: 'linkedin', cta: 'Read the posts', stat: 'Daily' },
+  { name: 'LinkedIn', handle: 'Arab Kumar', line: 'An informative post on Flutter and building products, every single day.', url: 'https://www.linkedin.com/in/arab-kumar-b5853b191/', kind: 'linkedin', cta: 'Read the posts', stat: '20K+ devs reached weekly' },
   { name: 'GitHub', handle: 'KumarArab', line: 'Open-source Flutter UI builds, from audiobooks to trading apps.', url: 'https://github.com/KumarArab', kind: 'github', cta: 'See the repos', stat: '80 repos · 150+ ★' },
   { name: 'YouTube', handle: '@TheFlutterGuy', line: 'Dribbble designs turned into real Flutter apps, start to finish.', url: 'https://www.youtube.com/@theflutterguy', kind: 'youtube', cta: 'Watch', stat: '1.87K subscribers' },
   { name: 'Instagram', handle: '@the.flutter.guy', line: 'Bite-size Flutter tips for developers.', url: 'https://www.instagram.com/the.flutter.guy/', kind: 'instagram', cta: 'Follow' },
@@ -110,7 +144,7 @@ export const community: Channel[] = [
 ];
 
 export const stack = [
-  ['Flutter', 'Dart', 'iOS', 'Android', 'Firebase', 'FCM'],
-  ['WebSockets', 'Real-time multiplayer', 'GoRouter', 'Provider', 'Modular apps'],
-  ['LLMs', 'REST APIs', 'Analytics', 'Automation', 'App Store & Play releases'],
+  ['Flutter', 'Dart', 'Kotlin', 'Jetpack Compose', 'KMM', 'Android', 'iOS'],
+  ['Clean Architecture', 'Modularization', 'Riverpod', 'Server-driven UI', 'Golden tests', 'CI/CD'],
+  ['Firebase', 'Node.js', 'WebSockets', 'Redis', 'MongoDB', 'Mixpanel', 'Sentry', 'Datadog'],
 ];

@@ -1,10 +1,10 @@
 import '../styles/content.css';
 import { initPaletteChips } from '../lib/palette';
-import { gsap, ScrollTrigger, SplitText, initSmoothScroll, initCounters, initCursor, initMagnetic, revealLines, reduceMotion } from '../lib/motion';
+import { gsap, ScrollTrigger, SplitText, getLenis, initSmoothScroll, initCounters, initCursor, initMagnetic, revealLines, reduceMotion } from '../lib/motion';
 import { curtainIn, initTransitions } from '../lib/transition';
 import { initClock } from '../lib/clock';
 import { buildArt } from '../landing/art';
-import { audience, brandFit, collabs, creator, feed, headline, pillars, services, why, type Pillar, type Stat } from './data';
+import { audience, brandFit, collabs, creator, feed, headline, heroReel, pillars, services, why, type Pillar, type Stat } from './data';
 
 const $ = <T extends Element = HTMLElement>(s: string, root: ParentNode = document) => root.querySelector<T>(s)!;
 const $$ = <T extends Element = HTMLElement>(s: string, root: ParentNode = document) => [...root.querySelectorAll<T>(s)];
@@ -31,16 +31,15 @@ function reelHTML(p: Pick<Pillar, 'name' | 'formats' | 'image' | 'reel' | 'tint'
     : p.image
       ? `<img src="${p.image}" alt="${esc(p.name)} reel on @flipsidefolly" loading="lazy">`
       : `<div class="reel-ph" style="--t1:${p.tint[0]};--t2:${p.tint[1]}">${ICON[p.icon]}<b>${esc(p.name)}</b><span>reel coming soon</span></div>`;
-  const body = `${media}
+  const badge = p.link ? '<span class="reel-play" aria-hidden="true">▶ Tap for sound</span>' : '';
+  const body = `${media}${badge}
     <div class="reel-ui" aria-hidden="true">${ICON.heart}${ICON.comment}${ICON.share}</div>
     <p class="reel-handle">${esc(creator.handle)}<small>${esc(p.formats.split(' · ')[0])}</small></p>`;
-  return p.link ? `<a class="reel-link" href="${p.link}" target="_blank" rel="noopener" aria-label="Watch the ${esc(p.name)} reel on Instagram">${body}</a>` : body;
+  return p.link ? `<a class="reel-link" href="${p.link}" target="_blank" rel="noopener" data-ig="${p.link}" aria-label="Play the ${esc(p.name)} reel with sound">${body}</a>` : body;
 }
 
 /* ---------- hero ---------- */
-$('[data-hero-reel]').innerHTML = reelHTML({
-  name: 'Office humour', formats: 'Reel', image: '/creator/reels/DOvbsyGEy5z.webp', link: 'https://www.instagram.com/p/DOvbsyGEy5z/', tint: ['#000', '#000'], icon: 'laugh',
-});
+$('[data-hero-reel]').innerHTML = reelHTML(heroReel);
 $('[data-hero-stats]').innerHTML = headline.map(s => `<li><b>${fmt(s)}</b><span>${esc(s.label)}</span></li>`).join('');
 const stickers = $('[data-stickers]');
 const drawStickers = () => buildArt(stickers, 'content', stickers.clientWidth, stickers.clientHeight);
@@ -54,7 +53,7 @@ $('[data-pillar-copy]').innerHTML = pillars.map((p, i) => `
     <h3>${esc(p.name)}</h3>
     <p>${esc(p.line)}</p>
     <dl><div><dt>Formats</dt><dd style="font:400 14px/1.4 var(--mono)">${esc(p.formats)}</dd></div></dl>
-    ${p.link ? `<a class="btn btn-line" href="${p.link}" target="_blank" rel="noopener">Watch this reel <span class="arrow">↗</span></a>` : ''}
+    ${p.link ? `<a class="btn btn-line" href="${p.link}" target="_blank" rel="noopener" data-ig="${p.link}">Watch this reel <span class="arrow">↗</span></a>` : ''}
   </article>`).join('');
 $('[data-pillar-dots]').innerHTML = pillars.map(() => '<li></li>').join('');
 const pillarReel = $('[data-pillar-reel]');
@@ -102,10 +101,36 @@ $('[data-collabs]').innerHTML = collabs.map(c => `
     <p class="collab-cat">${esc(c.category)}</p>
     <p class="collab-count"><strong data-count="${c.videos}">${c.videos}</strong> UGC videos</p>
   </a>`).join('');
-const feedItems = feed.map(f => `<a class="feed-item" href="${f.url}" target="_blank" rel="noopener"><img src="${f.image}" alt="Reel on @flipsidefolly" loading="lazy"></a>`).join('');
+const feedItems = feed.map(f => `<a class="feed-item" href="${f.url}" target="_blank" rel="noopener" data-ig="${f.url}"><img src="${f.image}" alt="Reel on @flipsidefolly" loading="lazy"></a>`).join('');
 $('[data-feed]').innerHTML = feedItems + feedItems.replaceAll('<a class="feed-item"', '<a class="feed-item" aria-hidden="true" tabindex="-1"');
 $('[data-services]').innerHTML = services.map((s, i) => `
   <li class="svc"><span class="n">${String(i + 1).padStart(2, '0')}</span><b>${esc(s.name)}</b><span>${esc(s.detail)}</span></li>`).join('');
+
+/* ---------- reel player: Instagram's own embed, with sound, in a lightbox ---------- */
+const player = document.createElement('div');
+player.className = 'ig-player';
+player.hidden = true;
+player.innerHTML = `<div class="ig-box" role="dialog" aria-modal="true" aria-label="Instagram reel">
+  <button class="ig-close" type="button" aria-label="Close">×</button>
+  <iframe title="Instagram reel" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+  <a class="ig-open" target="_blank" rel="noopener">Open in Instagram ↗</a></div>`;
+document.body.appendChild(player);
+const igFrame = player.querySelector('iframe')!;
+const closePlayer = () => { player.hidden = true; igFrame.src = 'about:blank'; document.documentElement.classList.remove('is-locked'); getLenis()?.start(); };
+player.addEventListener('click', e => { if (e.target === player || (e.target as Element).closest('.ig-close')) closePlayer(); });
+addEventListener('keydown', e => { if (e.key === 'Escape' && !player.hidden) closePlayer(); });
+document.addEventListener('click', e => {
+  const a = (e.target as Element).closest<HTMLAnchorElement>('[data-ig]');
+  if (!a || e.metaKey || e.ctrlKey) return;
+  const m = a.dataset.ig!.match(/instagram\.com\/(?:p|reel)\/([^/?#]+)/);
+  if (!m) return;
+  e.preventDefault();
+  igFrame.src = `https://www.instagram.com/p/${m[1]}/embed/`;
+  player.querySelector<HTMLAnchorElement>('.ig-open')!.href = a.dataset.ig!;
+  player.hidden = false;
+  document.documentElement.classList.add('is-locked');
+  getLenis()?.stop();
+});
 
 /* ---------- book ---------- */
 $('[data-year]').textContent = String(new Date().getFullYear());
