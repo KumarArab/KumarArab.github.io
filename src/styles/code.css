@@ -80,7 +80,6 @@ section { position: relative; }
 .apps-copy { display: grid; }
 .app-copy { min-height: 88vh; display: grid; align-content: center; gap: 18px; padding-block: 6vh; opacity: .35; transition: opacity .5s var(--ease-out); }
 .app-copy.is-on { opacity: 1; }
-.app-shot-m { display: none; }
 .app-kind { font: 500 12px/1 var(--mono); color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
 .app-name { font: 600 clamp(44px, 5.4vw, 84px)/.95 var(--display); letter-spacing: -.045em; }
 .app-icon { display: inline-block; width: .62em; height: .62em; border-radius: .16em; margin-right: .18em; vertical-align: .02em; }
@@ -96,11 +95,21 @@ section { position: relative; }
 .store:hover { transform: translateY(-2px); }
 .store svg { width: 18px; height: 18px; }
 .store.blog { background: none; color: var(--code-ink); box-shadow: inset 0 0 0 1px var(--line); }
-.phone-wrap { position: sticky; top: max(90px, calc(50vh - 270px)); align-self: start; }
-.phone { position: relative; width: min(360px, 29vw); aspect-ratio: 2 / 3; border-radius: 28px; overflow: hidden; background: #111;
-  box-shadow: 0 50px 90px -30px rgba(0,0,0,.7), 0 0 0 1px var(--line); }
-.phone img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.04); transition: opacity .6s var(--ease-out), transform .8s var(--ease-out); }
-.phone img.is-on { opacity: 1; transform: none; }
+.phone-wrap { position: sticky; top: max(80px, calc(50vh - 300px)); align-self: start; width: min(560px, 40vw); }
+
+/* revolving ring of screenshots: cards sit around a circle and the ring turns slowly */
+.phone { --w: min(240px, 16vw); position: relative; height: calc(var(--w) * 5 / 3 + 120px); perspective: 1400px; }
+.orbit { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; transition: opacity .6s var(--ease-out); pointer-events: none; }
+.orbit.is-on { opacity: 1; pointer-events: auto; }
+.ring-tilt { transform-style: preserve-3d; transform: rotateX(-7deg); }
+.ring { --r: calc(var(--w) / 2 / tan(180deg / var(--n)) * 1.18); position: relative; width: var(--w); aspect-ratio: 3 / 5; transform-style: preserve-3d; animation: ring-spin 30s linear infinite; }
+.orbit:hover .ring, .orbit-m:hover .ring { animation-play-state: paused; }
+.ring-card { position: absolute; inset: 0; margin: 0; border-radius: 18px; overflow: hidden; background: #111; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  transform: rotateY(calc(var(--i) * 360deg / var(--n))) translateZ(var(--r)); box-shadow: 0 30px 60px -25px rgba(0,0,0,.8), 0 0 0 1px var(--line); }
+.ring-card img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+@keyframes ring-spin { to { transform: rotateY(-360deg); } }
+.orbit-m { display: none; }
+@media (prefers-reduced-motion: reduce) { .ring { animation: none; } }
 
 /* ---------- products: stacking cards ---------- */
 .products { padding: 120px var(--gutter) 10vh; }
@@ -213,7 +222,7 @@ section { position: relative; }
   .apps-body { grid-template-columns: 1fr; }
   .phone-wrap { display: none; }
   .app-copy { min-height: 0; opacity: 1; padding-block: 0 72px; }
-  .app-shot-m { display: block; width: min(260px, 72vw); aspect-ratio: 2 / 3; object-fit: cover; border-radius: 22px; box-shadow: 0 30px 60px -30px rgba(0,0,0,.7); margin-bottom: 6px; }
+  .orbit-m { --w: min(150px, 38vw); display: grid; place-items: center; height: calc(var(--w) * 5 / 3 + 60px); perspective: 1000px; margin-bottom: 8px; overflow: hidden; }
   .app-name { font-size: clamp(40px, 11vw, 56px); }
 
   .pcard { grid-template-columns: 1fr; min-height: 0; position: relative; top: auto; gap: 18px; }

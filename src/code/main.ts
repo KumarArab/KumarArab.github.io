@@ -40,6 +40,12 @@ $('[data-xp]').innerHTML = experience.map(r => `
 $('[data-xp-nodes]').innerHTML = experience.map(() => '<li></li>').join('');
 
 /* ---------- apps ---------- */
+/** A ring of the app's store screenshots that slowly revolves in 3D. */
+function ringHTML(a: App) {
+  const n = a.screens.length;
+  return `<div class="ring-tilt"><div class="ring" style="--n:${n}">${a.screens.map((src, i) =>
+    `<figure class="ring-card" style="--i:${i}"><img src="${src}" alt="${esc(a.name)} screen ${i + 1}" loading="lazy"></figure>`).join('')}</div></div>`;
+}
 const linkHTML = (l: App['links'][number]) => {
   const icon = l.kind === 'appstore' ? ICON.appstore : l.kind === 'play' ? ICON.play : l.kind === 'blog' ? ICON.blog : l.kind === 'github' ? ICON.github : ICON.web;
   const secondary = l.kind === 'blog' || l.kind === 'github';
@@ -47,7 +53,7 @@ const linkHTML = (l: App['links'][number]) => {
 };
 $('[data-apps-copy]').innerHTML = apps.map((a, i) => `
   <article class="app-copy" data-i="${i}">
-    ${a.screens[0] ? `<img class="app-shot-m" src="${a.screens[0]}" alt="${esc(a.name)} on the store" loading="lazy">` : ''}
+    <div class="orbit-m">${ringHTML(a)}</div>
     <p class="app-kind">${String(i + 1).padStart(2, '0')} / ${String(apps.length).padStart(2, '0')} · ${esc(a.kind)}</p>
     <h3 class="app-name">${a.icon ? `<img class="app-icon" src="${a.icon}" alt="">` : ''}${esc(a.name)}</h3>
     <p class="app-line">${esc(a.line)}</p>
@@ -56,8 +62,8 @@ $('[data-apps-copy]').innerHTML = apps.map((a, i) => `
     <div class="app-links">${a.links.map(linkHTML).join('')}</div>
     <div class="xp-stack">${a.stack.map(s => `<span class="chip">${esc(s)}</span>`).join('')}</div>
   </article>`).join('');
-// the sticky phone holds one screenshot per app and crossfades between them
-$('[data-phone]').innerHTML = apps.map((a, i) => `<img src="${a.screens[0] ?? a.icon ?? ''}" alt="${esc(a.name)} on the store" class="${i === 0 ? 'is-on' : ''}" loading="${i === 0 ? 'eager' : 'lazy'}">`).join('');
+// the sticky stage holds one revolving ring of screenshots per app and crossfades between them
+$('[data-phone]').innerHTML = apps.map((a, i) => `<div class="orbit ${i === 0 ? 'is-on' : ''}">${ringHTML(a)}</div>`).join('');
 
 /* ---------- products ---------- */
 $('[data-products]').innerHTML = products.map((p, i) => `
@@ -189,7 +195,7 @@ $$('.xp-card').forEach((card, i) => ScrollTrigger.create({
   trigger: card, start: 'top 65%', end: 'bottom 35%',
   onToggle: s => { card.classList.toggle('is-on', s.isActive); if (s.isActive) nodes.forEach((n, j) => n.classList.toggle('is-on', j <= i)); },
 }));
-const shots = $$('[data-phone] img');
+const shots = $$('[data-phone] .orbit');
 $$('.app-copy').forEach((copy, i) => ScrollTrigger.create({
   trigger: copy, start: 'top 55%', end: 'bottom 45%',
   onToggle: s => {
