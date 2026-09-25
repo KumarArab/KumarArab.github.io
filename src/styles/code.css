@@ -97,19 +97,27 @@ section { position: relative; }
 .store.blog { background: none; color: var(--code-ink); box-shadow: inset 0 0 0 1px var(--line); }
 .phone-wrap { position: sticky; top: max(70px, calc(50vh - 330px)); align-self: start; width: min(760px, 50vw); }
 
-/* revolving ring of screenshots: cards sit around a circle and the ring turns slowly */
-.phone { --w: min(300px, 20vw); position: relative; height: calc(var(--w) * 5 / 3 + 60px); perspective: 1400px; }
-.orbit { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; transition: opacity .6s var(--ease-out); pointer-events: none; }
+/* screenshots as a deck of cards: shuffles on its own, fans out on hover */
+.phone { --w: min(300px, 20vw); position: relative; height: calc(var(--w) * 5 / 3 + 90px); transform-style: preserve-3d; transform: perspective(1400px); }
+.orbit { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 22px; opacity: 0; transition: opacity .6s var(--ease-out); pointer-events: none; }
 .orbit.is-on { opacity: 1; pointer-events: auto; }
-.ring-tilt { transform-style: preserve-3d; transform: rotateX(-7deg); }
-.ring { --r: calc(var(--w) / 2 / tan(180deg / var(--n)) * 1.08); position: relative; width: var(--w); aspect-ratio: 3 / 5; transform-style: preserve-3d; animation: ring-spin 30s linear infinite; }
-.orbit:hover .ring, .orbit-m:hover .ring { animation-play-state: paused; }
-.ring-card { position: absolute; inset: 0; margin: 0; border-radius: 18px; overflow: hidden; background: #111; backface-visibility: hidden; -webkit-backface-visibility: hidden;
-  transform: rotateY(calc(var(--i) * 360deg / var(--n))) translateZ(var(--r)); box-shadow: 0 30px 60px -25px rgba(0,0,0,.8), 0 0 0 1px var(--line); }
-.ring-card img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
-@keyframes ring-spin { to { transform: rotateY(-360deg); } }
+.deck { position: relative; width: var(--w); aspect-ratio: 3 / 5; cursor: pointer; outline: none; }
+.deck-card { position: absolute; inset: 0; margin: 0; border-radius: 20px; overflow: hidden; background: #111;
+  box-shadow: 0 30px 60px -25px rgba(0,0,0,.85), 0 0 0 1px var(--line);
+  transform: translate(calc(var(--s) * var(--p) * 14px), calc(var(--p) * -8px)) rotate(calc(var(--s) * (3deg + var(--p) * 2deg))) scale(calc(1 - var(--p) * .05));
+  filter: brightness(calc(1 - var(--p) * .12));
+  transition: transform .55s cubic-bezier(.2,.8,.2,1), filter .55s; }
+.deck-card img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.deck-card.is-leaving { transform: translate(-115%, 30px) rotate(-18deg) scale(.95) !important; transition-duration: .42s; }
+/* hover: spread the whole hand so every screen is visible */
+.deck:hover .deck-card, .deck:focus-visible .deck-card {
+  transform: translateX(calc(var(--fx) * 40%)) translateY(calc(var(--p) * 8px)) rotate(calc(var(--fx) * 7deg)) scale(calc(.92 - var(--p) * .04)); filter: none; }
+.deck:hover .deck-card:hover { transform: translateX(calc(var(--fx) * 40%)) translateY(-18px) rotate(0) scale(1); z-index: 20 !important; }
+.deck-dots { list-style: none; margin: 0; padding: 0; display: flex; gap: 6px; }
+.deck-dots li { width: 6px; height: 6px; border-radius: 6px; background: var(--line); transition: width .4s var(--ease-out), background .4s; }
+.deck-dots li.is-on { width: 22px; background: var(--code-accent); }
 .orbit-m { display: none; }
-@media (prefers-reduced-motion: reduce) { .ring { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .deck-card { transition: none; } }
 
 /* ---------- products: stacking cards ---------- */
 .products { padding: 120px var(--gutter) 10vh; }
@@ -222,7 +230,8 @@ section { position: relative; }
   .apps-body { grid-template-columns: 1fr; }
   .phone-wrap { display: none; }
   .app-copy { min-height: 0; opacity: 1; padding-block: 0 72px; }
-  .orbit-m { --w: min(190px, 46vw); display: grid; place-items: center; height: calc(var(--w) * 5 / 3 + 40px); perspective: 1000px; margin-bottom: 8px; overflow: hidden; }
+  .orbit-m { --w: min(200px, 50vw); display: grid; justify-items: center; gap: 16px; padding: 12px 0 8px; margin-bottom: 8px; overflow: hidden; }
+  .orbit-m .deck:hover .deck-card { transform: translate(calc(var(--s) * var(--p) * 14px), calc(var(--p) * -8px)) rotate(calc(var(--s) * (3deg + var(--p) * 2deg))) scale(calc(1 - var(--p) * .05)); }
   .app-name { font-size: clamp(40px, 11vw, 56px); }
 
   .pcard { grid-template-columns: 1fr; min-height: 0; position: relative; top: auto; gap: 18px; }

@@ -40,11 +40,12 @@ $('[data-xp]').innerHTML = experience.map(r => `
 $('[data-xp-nodes]').innerHTML = experience.map(() => '<li></li>').join('');
 
 /* ---------- apps ---------- */
-/** A ring of the app's store screenshots that slowly revolves in 3D. */
-function ringHTML(a: App) {
-  const n = a.screens.length;
-  return `<div class="ring-tilt"><div class="ring" style="--n:${n}">${a.screens.map((src, i) =>
-    `<figure class="ring-card" style="--i:${i}"><img src="${src}" alt="${esc(a.name)} screen ${i + 1}" loading="lazy"></figure>`).join('')}</div></div>`;
+/** The app's store screenshots as a deck of cards: the front card shuffles to the back every few seconds,
+ *  and the deck fans out on hover so every screen is visible at once. */
+function deckHTML(a: App) {
+  return `<div class="deck" role="button" tabindex="0" aria-label="${esc(a.name)} screenshots, tap for the next one">
+    ${a.screens.map((src, i) => `<figure class="deck-card" data-pos="${i}"><img src="${src}" alt="${esc(a.name)} screen ${i + 1}" loading="lazy"></figure>`).join('')}
+  </div><ol class="deck-dots" aria-hidden="true">${a.screens.map((_, i) => `<li class="${i === 0 ? 'is-on' : ''}"></li>`).join('')}</ol>`;
 }
 const linkHTML = (l: App['links'][number]) => {
   const icon = l.kind === 'appstore' ? ICON.appstore : l.kind === 'play' ? ICON.play : l.kind === 'blog' ? ICON.blog : l.kind === 'github' ? ICON.github : ICON.web;
@@ -53,7 +54,7 @@ const linkHTML = (l: App['links'][number]) => {
 };
 $('[data-apps-copy]').innerHTML = apps.map((a, i) => `
   <article class="app-copy" data-i="${i}">
-    <div class="orbit-m">${ringHTML(a)}</div>
+    <div class="orbit-m">${deckHTML(a)}</div>
     <p class="app-kind">${String(i + 1).padStart(2, '0')} / ${String(apps.length).padStart(2, '0')} · ${esc(a.kind)}</p>
     <h3 class="app-name">${a.icon ? `<img class="app-icon" src="${a.icon}" alt="">` : ''}${esc(a.name)}</h3>
     <p class="app-line">${esc(a.line)}</p>
@@ -62,8 +63,63 @@ $('[data-apps-copy]').innerHTML = apps.map((a, i) => `
     <div class="app-links">${a.links.map(linkHTML).join('')}</div>
     <div class="xp-stack">${a.stack.map(s => `<span class="chip">${esc(s)}</span>`).join('')}</div>
   </article>`).join('');
-// the sticky stage holds one revolving ring of screenshots per app and crossfades between them
-$('[data-phone]').innerHTML = apps.map((a, i) => `<div class="orbit ${i === 0 ? 'is-on' : ''}">${ringHTML(a)}</div>`).join('');
+// the sticky stage holds one deck of screenshots per app and crossfades between them
+$('[data-phone]').innerHTML = apps.map((a, i) => `<div class="orbit ${i === 0 ? 'is-on' : ''}">${deckHTML(a)}</div>`).join('');
+
+/* ---------- decks: lay out, shuffle, fan, tilt ---------- */
+function layDeck(deck: HTMLElement) {
+  const cards = [...deck.querySelectorAll<HTMLElement>('.deck-card')];
+  cards.forEach(c => {
+    const p = +c.dataset.pos!;
+    const side = p % 2 ? 1 : -1;                // back cards peek out alternately left and right
+    c.style.setProperty('--p', String(p));
+    c.style.setProperty('--s', String(p ? side : 0));
+    c.style.setProperty('--fx', String(p ? side * Math.ceil(p / 2) : 0));   // slot when fanned out
+    c.style.zIndex = String(cards.length - p);
+  });
+  const front = cards.findIndex(c => c.dataset.pos === '0');
+  deck.nextElementSibling?.querySelectorAll('li').forEach((d, i) => d.classList.toggle('is-on', i === front));
+}
+function shuffle(deck: HTMLElement) {
+  if (deck.classList.contains('is-busy')) return;
+  const cards = [...deck.querySelectorAll<HTMLElement>('.deck-card')];
+  const front = cards.find(c => c.dataset.pos === '0')!;
+  deck.classList.add('is-busy');
+  front.classList.add('is-leaving');           // flick the front card out…
+  setTimeout(() => {
+    cards.forEach(c => { c.dataset.pos = String((+c.dataset.pos! - 1 + cards.length) % cards.length); });
+    front.classList.remove('is-leaving');      // …and tuck it in at the back
+    layDeck(deck);
+    setTimeout(() => deck.classList.remove('is-busy'), 450);
+  }, 420);
+}
+const decks = $$('.deck');
+decks.forEach(d => {
+  layDeck(d);
+  d.addEventListener('click', () => shuffle(d));
+  d.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); shuffle(d); } });
+});
+// auto-shuffle only decks that are on screen and not being looked at closely
+const inView = new Set<HTMLElement>();
+const deckIO = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? inView.add(e.target as HTMLElement) : inView.delete(e.target as HTMLElement)));
+decks.forEach(d => deckIO.observe(d));
+if (!RM) setInterval(() => inView.forEach(d => {
+  const stage = d.closest('.orbit');
+  if (d.matches(':hover') || (stage && !stage.classList.contains('is-on'))) return;
+  shuffle(d);
+}), 3000);
+// the desktop deck tilts toward the cursor
+const phoneStage = $('[data-phone]');
+if (!RM && matchMedia('(hover: hover)').matches) {
+  const rx = gsap.quickTo(phoneStage, 'rotationX', { duration: 0.8, ease: 'power3.out' });
+  const ry = gsap.quickTo(phoneStage, 'rotationY', { duration: 0.8, ease: 'power3.out' });
+  phoneStage.addEventListener('pointermove', e => {
+    const r = phoneStage.getBoundingClientRect();
+    ry(((e.clientX - r.left) / r.width - 0.5) * 16);
+    rx(-((e.clientY - r.top) / r.height - 0.5) * 12);
+  });
+  phoneStage.addEventListener('pointerleave', () => { rx(0); ry(0); });
+}
 
 /* ---------- products ---------- */
 $('[data-products]').innerHTML = products.map((p, i) => `
