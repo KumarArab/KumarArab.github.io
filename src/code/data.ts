@@ -81,7 +81,7 @@ export const apps: App[] = [
     ],
     metrics: [{ value: '10K+', label: 'downloads' }, { value: '4.1★', label: 'App Store' }, { value: '4', label: 'games in one app' }],
     stack: ['Flutter', 'Node.js', 'Firebase', 'WebSockets', 'AdMob mediation', 'Mixpanel'],
-    screens: ['/work/cabo/1.webp', '/work/cabo/2.webp', '/work/cabo/3.webp'], icon: '/work/cabo/icon.webp',
+    screens: ['/work/cabo/1.webp', '/work/cabo/2.webp', '/work/cabo/3.webp', '/work/cabo/4.webp', '/work/cabo/5.webp'], icon: '/work/cabo/icon.webp',
   },
   {
     id: 'matrix', name: 'Matrix News', kind: 'AI news app',
@@ -93,7 +93,7 @@ export const apps: App[] = [
     ],
     metrics: [{ value: '5.0★', label: 'App Store' }, { value: '4.2★', label: 'Google Play' }, { value: '4+', label: 'summary styles' }],
     stack: ['Flutter', 'LLM summaries', 'News pipeline'],
-    screens: ['/work/matrix/1.webp', '/work/matrix/2.webp', '/work/matrix/3.webp'], icon: '/work/matrix/icon.webp',
+    screens: ['/work/matrix/1.webp', '/work/matrix/2.webp', '/work/matrix/3.webp', '/work/matrix/4.webp', '/work/matrix/5.webp'], icon: '/work/matrix/icon.webp',
   },
   {
     id: 'paperid', name: 'Paperid', kind: 'Audiobook app · open source',
@@ -105,7 +105,7 @@ export const apps: App[] = [
     ],
     metrics: [{ value: '28★', label: 'on the UI repo' }, { value: '11', label: 'forks' }, { value: '100%', label: 'open source' }],
     stack: ['Flutter', 'Firebase'],
-    screens: ['/work/paperid/1.webp', '/work/paperid/2.webp', '/work/paperid/3.webp'], icon: '/work/paperid/icon.webp',
+    screens: ['/work/paperid/1.webp', '/work/paperid/2.webp', '/work/paperid/3.webp', '/work/paperid/4.webp', '/work/paperid/5.webp'], icon: '/work/paperid/icon.webp',
   },
 ];
 
