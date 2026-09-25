@@ -7,6 +7,62 @@ Domain: **arabkumar.in** (hosted on GitHub Pages from this repo).
 
 ---
 
+# v3 Information Architecture (current source of truth)
+
+Three pages, three audiences:
+- `/` **Landing**: everyone. Job: explain in about 3 seconds that there are two sides and route people.
+- `/code` **Technical**: recruiters and hiring managers. Job: a 30-second scan, then proof.
+- `/content` **Creative (@flipsidefolly)**: brands and agencies. Job: a media kit that sells the fit.
+
+Brain metaphor: **left brain = Code (logic), right brain = Content (creative)**. So Code moves to the LEFT.
+
+## Landing `/`
+1. The 3D brain sits in the centre. The left hemisphere is a wireframe or circuit mesh with code particles.
+   The right hemisphere is a glossy liquid blob with colour and motion. The cursor tilts the brain, and
+   hovering a hemisphere lights it up and floods that half of the screen (the liquid split stays).
+2. Copy: "Arab Kumar" · "Two halves. One brain." ·
+   left "Code: I build mobile apps & products people use." + **Enter Codebase** ·
+   right "Content: I make reels people replay." + **Enter Studio**.
+3. Router line under the brain: "Hiring? Go left. Collaborating? Go right."
+4. Footer: LinkedIn · GitHub · @flipsidefolly · daily palette chip.
+
+## Technical `/code` (recruiter flow: skim → proof → contact)
+0. Sticky bar: name · "Open to opportunities" pill · Resume · Email. Also a "60-second version" toggle for a one-screen summary.
+1. **Hero / TL;DR**: title, years of experience, current company, location, and 4 stat counters
+   (years · apps live · downloads · community followers). Buttons: Resume · LinkedIn · GitHub.
+2. **Experience**: timeline from LinkedIn, drawn as a commit log (role, company, dates, 2 impact bullets, stack).
+3. **Flagship apps (live on stores)**: big case studies with 3D phones, store badges and a "Live" pill:
+   - Cabo: multiplayer card (memory) game on iOS and Android, linked to the engineering blog
+   - Matrix: news app on iOS and Android
+   - Paperid: audiobook app on Android
+4. **Built for my own problems (indie products)**: problem → solution cards with a status pill:
+   - SnapMyCode (web), Casca (IG → YouTube auto-post), Flutter Guru (LinkedIn post automation),
+     Buckminister (expense tracker, in development)
+5. **Playables**: web games you can play right there inside a phone frame: Juice Merge, Story Quiz, Matching Tiles.
+6. **Writing & community**: Cabo engineering blog, daily LinkedIn posts, @the.flutter.guy (IG),
+   YouTube @theflutterguy, GitHub (Flutter UI/UX repos, contributions graph).
+7. **Stack**: grouped by job (Mobile · Backend · Web · Tooling · AI).
+8. **Contact**: "Hiring for mobile? Let's talk." · Email · Resume · LinkedIn, then a crossover teaser: "There's another half →".
+
+## Creative `/content` (brand flow: who → numbers → fit → proof → book)
+1. **Hero**: @flipsidefolly, a looping reel or portrait, a positioning line, niche tags
+   (Dance · Fashion · Humour · Relatable), and 4 headline numbers (followers · avg reach · engagement rate · avg views).
+2. **Meet the creator**: 3 lines of personality, what the page feels like.
+3. **Content pillars**: Dance classes · Fashion · Humour · Relatable/yap. Each has a reel frame that autoplays plus its avg views.
+4. **Performance**: top reels by views, reach and engagement trend, engagement vs benchmark. Numbers carry an "as of" date.
+5. **Audience**: age, gender, top cities and countries. This is where brands check fit.
+6. **Brand fit**: the categories I'm a natural fit for, the values, and what I don't promote.
+7. **Past collaborations**: logos plus mini case studies (brief → content → results).
+8. **Services**: Reel · Story · Carousel · UGC · Dance challenge · Event/appearance. Packages, rates on request.
+9. **Book**: email, DM, media kit PDF, then a crossover teaser: "Also builds apps →".
+
+## Copy principles
+- Every section headline states a claim. The numbers directly below it prove the claim.
+- Recruiter page: plain and specific ("5 apps live, 2 platforms"). Brand page: voice-first and warm, but still numbers-led.
+- Each page has a single primary CTA, repeated at the top and the bottom.
+
+---
+
 ## 1. How those "Instagram-famous" sites are actually built
 
 They use the same small toolkit over and over:
