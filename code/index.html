@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Arab Kumar · Code</title>
+  <meta name="description" content="Arab Kumar, mobile engineer (Flutter). Apps live on the App Store and Play Store, products built for real problems, playable web games and a daily developer community.">
+  <meta property="og:title" content="Arab Kumar · Code">
+  <meta property="og:description" content="I build apps people keep coming back to.">
+  <meta property="og:url" content="https://arabkumar.in/code/">
+  <meta name="theme-color" content="#0E1116">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&display=swap">
+</head>
+<body class="code-page">
+  <div class="curtain" style="background: var(--code-bg)"></div>
+  <canvas id="bg-rain" aria-hidden="true"></canvas>
+
+  <header class="topbar">
+    <a class="home" href="/" data-go="home" aria-label="Back to arabkumar.in">← <b>Arab Kumar</b></a>
+    <nav class="secnav" aria-label="Sections">
+      <a href="#experience">Experience</a>
+      <a href="#apps">Apps</a>
+      <a href="#products">Products</a>
+      <a href="#play">Play</a>
+      <a href="#community">Community</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="topbar-r">
+      <span class="pill status"><span class="dot"></span>Open to opportunities</span>
+      <a class="pill" href="/resume.pdf" target="_blank" rel="noopener">Resume ↗</a>
+      <a class="pill flip" href="/content/" data-go="content">Content →</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="hero-copy">
+        <p class="kicker">// the codebase · Mobile Engineer · Flutter · India</p>
+        <h1 class="hero-title">I build apps people keep <em>coming back</em> to.</h1>
+        <p class="hero-sub">Games, news and audiobooks live on the App Store and Play Store, plus the tools I built to fix my own problems.</p>
+        <ul class="facts" data-facts></ul>
+        <div class="hero-ctas">
+          <a class="btn btn-accent" href="#experience" data-magnetic>See the work <span class="arrow">↓</span></a>
+          <a class="btn btn-ghost" href="/resume.pdf" target="_blank" rel="noopener">Resume <span class="arrow">↗</span></a>
+        </div>
+      </div>
+      <figure class="editor" aria-label="A Dart class describing Arab">
+        <div class="editor-bar"><i></i><i></i><i></i><span>arab.dart</span></div>
+        <pre><code data-typer></code></pre>
+      </figure>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section class="xp" id="experience">
+      <div class="pin">
+        <header class="sec-head">
+          <p class="kicker">01 · Experience</p>
+          <h2>Where I've shipped.</h2>
+        </header>
+        <div class="xp-rail" aria-hidden="true"><span class="xp-fill"></span><ol data-xp-nodes></ol></div>
+        <div class="xp-stage" data-xp></div>
+      </div>
+    </section>
+
+    <!-- FLAGSHIP APPS -->
+    <section class="apps" id="apps">
+      <div class="pin">
+        <div class="apps-bgword" aria-hidden="true" data-apps-word></div>
+        <header class="sec-head">
+          <p class="kicker">02 · Live on the stores</p>
+          <h2>Apps that make you sharper.</h2>
+        </header>
+        <div class="apps-copy" data-apps-copy></div>
+        <div class="phone-wrap">
+          <div class="phone" data-phone>
+            <div class="phone-face front" data-face="front"></div>
+            <div class="phone-face back" data-face="back"></div>
+          </div>
+        </div>
+        <ol class="apps-index" data-apps-index aria-hidden="true"></ol>
+      </div>
+    </section>
+
+    <!-- INDIE PRODUCTS -->
+    <section class="products" id="products">
+      <header class="sec-head sec-head--flow">
+        <p class="kicker">03 · Built for my own problems</p>
+        <h2>When something annoys me, I ship a fix.</h2>
+      </header>
+      <div class="stack-cards" data-products></div>
+    </section>
+
+    <!-- PLAYABLES -->
+    <section class="play" id="play">
+      <div class="play-word" aria-hidden="true">PLAY · PLAY · PLAY · PLAY · PLAY · PLAY ·</div>
+      <div class="play-inner">
+        <header class="sec-head">
+          <p class="kicker">04 · Playables</p>
+          <h2>Don't read about it. Play it.</h2>
+          <p class="sec-sub">These games run live, right here. Tap the phone and play.</p>
+        </header>
+        <div class="play-list" role="tablist" aria-label="Games" data-play-list></div>
+        <div class="play-phone">
+          <div class="phone-shell">
+            <iframe title="Playable game" data-play-frame loading="lazy" allow="autoplay; fullscreen"></iframe>
+            <button class="play-cover" type="button" data-play-cover>Tap to play</button>
+          </div>
+          <a class="play-open" data-play-open target="_blank" rel="noopener">Open full screen ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMMUNITY -->
+    <section class="community" id="community">
+      <div class="pin">
+        <div class="comm-track" data-comm>
+          <header class="comm-intro sec-head">
+            <p class="kicker">05 · Community</p>
+            <h2>I learn in public, daily.</h2>
+            <p class="sec-sub">Posts, videos, open source and an engineering blog, all about building with Flutter.</p>
+            <span class="scroll-hint">Keep scrolling →</span>
+          </header>
+        </div>
+      </div>
+    </section>
+
+    <!-- STACK -->
+    <section class="stackrows" id="stack" aria-label="Tech stack" data-stack></section>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+      <p class="kicker">06 · Contact</p>
+      <h2 class="contact-title">Hiring for mobile? <span>Let's talk.</span></h2>
+      <div class="contact-actions">
+        <button class="btn btn-accent btn-xl" type="button" data-email data-magnetic>arabkumar1000@gmail.com</button>
+        <p class="copied" data-copied role="status"></p>
+      </div>
+      <div class="contact-links">
+        <a href="/resume.pdf" target="_blank" rel="noopener">Resume ↗</a>
+        <a href="https://www.linkedin.com/in/arab-kumar-b5853b191/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a href="https://github.com/KumarArab" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+      <a class="crossover" href="/content/" data-go="content">
+        <span class="crossover-small">That's one half.</span>
+        <span class="crossover-big">Meet the other half →</span>
+      </a>
+      <footer class="page-foot">
+        <span>© <span data-year></span> Arab Kumar</span>
+        <span data-clock>IST</span>
+        <button type="button" data-palette-chip></button>
+      </footer>
+    </section>
+  </main>
+
+  <script type="module" src="/src/code/main.ts"></script>
+</body>
+</html>
