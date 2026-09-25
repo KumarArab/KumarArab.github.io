@@ -1,68 +1,77 @@
 // Everything shown on arabkumar.in/content lives here.
-// `null` numbers render as "—" until the real stats arrive from Instagram Insights / the media kit.
+// Numbers, audience and brands come from the @flipsidefolly media kit (flipsidefolly-mediakit.web.app).
 
 export const creator = {
   handle: '@flipsidefolly',
   instagram: 'https://www.instagram.com/flipsidefolly/',
   mediaKit: 'https://flipsidefolly-mediakit.web.app',
-  email: 'arabkumar1000@gmail.com',   // TODO(arab): collab email if different
-  statsAsOf: null as string | null,     // e.g. 'Sep 2026'
+  email: 'flipsidefolly@gmail.com',
+  city: 'Bengaluru',
+  statsAsOf: 'the latest media kit' as string | null,
 };
 
 export interface Stat { label: string; value: number | null; suffix?: string; decimals?: number; note: string }
 
-// TODO(arab): fill from Instagram Insights (last 30 or 90 days).
 export const headline: Stat[] = [
-  { label: 'Followers', value: null, suffix: 'K', note: 'People who chose to see more.' },
-  { label: 'Avg. reach per reel', value: null, suffix: 'K', note: 'Unique accounts each reel reaches, on average.' },
-  { label: 'Avg. views per reel', value: null, suffix: 'K', note: 'Plays per reel, including replays.' },
-  { label: 'Engagement rate', value: null, suffix: '%', decimals: 1, note: 'Likes, comments, shares and saves divided by reach.' },
-  { label: 'Top reel', value: null, suffix: 'M', decimals: 1, note: 'Views on the best-performing reel so far.' },
+  { label: 'Avg. plays per reel', value: 27, suffix: 'K', note: '12× the follower count. The reels travel well beyond the people who already follow.' },
+  { label: 'Total plays', value: 2.7, suffix: 'M', decimals: 1, note: 'Every one of them organic. No paid boosts.' },
+  { label: 'Engagement rate', value: 4.8, suffix: '%', decimals: 1, note: 'Measured by plays, not followers, so it reflects how people react to the reel itself.' },
+  { label: 'Followers', value: 2.3, suffix: 'K', decimals: 1, note: 'Quality over quantity: a tight audience that looks like the person making the content.' },
 ];
 
-export interface Pillar { name: string; line: string; formats: string; avgViews: number | null; tint: [string, string]; icon: string; reel?: string; link?: string }
+export interface Pillar { name: string; line: string; formats: string; image?: string; reel?: string; link?: string; tint: [string, string]; icon: string }
 
-// reel: path to a short muted mp4 in /public/reels/ (empty = styled placeholder)
+// image: reel cover in /public/creator/reels/; reel: optional short muted mp4 that plays instead
 export const pillars: Pillar[] = [
-  { name: 'Dance', line: 'Class clips, choreography and trends, shot so you can learn the moves.', formats: 'Reels · Class videos · Trends', avgViews: null, tint: ['#FF5F6D', '#FFC371'], icon: 'dance' },
-  { name: 'Fashion', line: 'Fit checks, styling ideas and outfits that work off the runway.', formats: 'Reels · Carousels · Fit checks', avgViews: null, tint: ['#8E7CFF', '#F4B8FF'], icon: 'hanger' },
-  { name: 'Humour', line: 'Everyday moments turned into the reel you send to your group chat.', formats: 'Skits · POVs · Memes', avgViews: null, tint: ['#00B4DB', '#9CFFCE'], icon: 'laugh' },
-  { name: 'Relatable & yap', line: 'Honest talk, useful info and hot takes, straight to camera.', formats: 'Talking heads · Carousels · Stories', avgViews: null, tint: ['#F7971E', '#FFD200'], icon: 'mic' },
+  { name: 'Office humour', line: 'Standups, managers and Mondays, from someone who is actually in them.', formats: 'Reels · POVs · Skits', image: '/creator/reels/DZ2nvr_TDbr.webp', link: 'https://www.instagram.com/p/DZ2nvr_TDbr/', tint: ['#FF5F6D', '#FFC371'], icon: 'laugh' },
+  { name: 'Fits', line: 'Workday outfits for people in tech who still want to look good.', formats: 'Reels · Fit checks · Carousels', image: '/creator/reels/DZm4Egsz5Jx.webp', link: 'https://www.instagram.com/p/DZm4Egsz5Jx/', tint: ['#8E7CFF', '#F4B8FF'], icon: 'hanger' },
+  { name: 'Dance', line: 'Class videos and freestyle clips, wherever there is floor space.', formats: 'Reels · Class videos · Trends', image: '/creator/reels/DNIuO3APQ05.webp', link: 'https://www.instagram.com/p/DNIuO3APQ05/', tint: ['#00B4DB', '#9CFFCE'], icon: 'dance' },
+  { name: 'Bengaluru life', line: 'Cafés, lakes and slow weekends. The life the audience is building too.', formats: 'Reels · Vlogs · Stories', image: '/creator/reels/DZSS2A1PdRy.webp', link: 'https://www.instagram.com/p/DZSS2A1PdRy/', tint: ['#F7971E', '#FFD200'], icon: 'mic' },
 ];
+
+/** Reel covers for the "from the feed" strip. */
+export const feed = ['DOgVOrDj58_', 'DOvbsyGEy5z', 'DME6lnyTluH', 'DOtIDiCk10T', 'DZC06SOz7tQ', 'DZ2nvr_TDbr', 'DNIuO3APQ05', 'DZm4Egsz5Jx', 'DZSS2A1PdRy']
+  .map(id => ({ image: `/creator/reels/${id}.webp`, url: `https://www.instagram.com/p/${id}/` }));
 
 export interface Split { label: string; value: number | null }
 
-// TODO(arab): from Instagram Insights → Audience.
 export const audience = {
-  gender: [{ label: 'Women', value: null }, { label: 'Men', value: null }] as Split[],
+  gender: [{ label: 'Men', value: 74.3 }, { label: 'Women', value: 25.7 }] as Split[],
   age: [
-    { label: '13–17', value: null }, { label: '18–24', value: null }, { label: '25–34', value: null },
-    { label: '35–44', value: null }, { label: '45+', value: null },
+    { label: '25–34', value: 57.6 }, { label: '18–24', value: 32.7 }, { label: '35–44', value: 6.5 }, { label: '13–17', value: 0.8 },
   ] as Split[],
-  cities: ['City 1', 'City 2', 'City 3', 'City 4', 'City 5'],
-  countries: ['India', 'Country 2', 'Country 3'],
+  countries: [
+    { label: 'India', value: 43.9 }, { label: 'Nigeria', value: 5.5 }, { label: 'Pakistan', value: 5.2 },
+    { label: 'United States', value: 3.5 }, { label: 'Kenya', value: 3.4 },
+  ] as Split[],
 };
+
+/** Why brands get results here, from the media kit. */
+export const why = [
+  { title: 'The audience is the same person', body: "They aren't watching for outfit inspo. They watch because it looks like a life they're already building: same city, same grind, same attempt at dressing well." },
+  { title: "It reads like someone's actual feed", body: "Because it is. No studio, no stylist, no script. That's why it doesn't look like an ad, even when it is one." },
+  { title: 'The joke is always grounded', body: "The humour comes from real work and city moments. People aren't sharing content, they're sharing a feeling they recognise." },
+];
 
 // TODO(arab): confirm both lists.
 export const brandFit = {
-  yes: ['Fashion & streetwear', 'Footwear', 'Beauty & grooming', 'Dance & fitness', 'Apps & gadgets', 'Cafés & food', 'Lifestyle & travel', 'Events & music'],
+  yes: ["Men's fashion & activewear", 'Footwear', 'Grooming', 'Tech & gadgets', 'Productivity & SaaS apps', 'EdTech & careers', 'Cafés & food', 'Lifestyle apps'],
   no: ['Betting & gambling', 'Get-rich-quick schemes', "Anything I wouldn't use myself"],
 };
 
-export interface Collab { brand: string; what: string; result: string; todo?: boolean }
+export interface Collab { brand: string; url: string; category: string; videos: number; logo: string }
 
-// TODO(arab): real partnerships (paid + UGC).
 export const collabs: Collab[] = [
-  { brand: 'Brand name', what: 'Reel + 3 stories', result: 'Views, clicks or sales', todo: true },
-  { brand: 'Brand name', what: 'UGC video for ads', result: 'Views, clicks or sales', todo: true },
-  { brand: 'Brand name', what: 'Dance trend launch', result: 'Views, clicks or sales', todo: true },
+  { brand: 'MasterEdu.ai', url: 'https://masteredu.ai/', category: 'AI education platform', videos: 30, logo: '/creator/brands/master.webp' },
+  { brand: 'Blissclub', url: 'https://blissclub.com/pages/mens-wear', category: "Men's activewear", videos: 10, logo: '/creator/brands/blissclub.webp' },
+  { brand: 'SriMandir', url: 'https://www.srimandir.com/', category: 'Devotional & lifestyle app', videos: 5, logo: '/creator/brands/srimandir.webp' },
 ];
 
 export const services = [
+  { name: 'UGC video', detail: 'Ad-ready videos for your own pages and campaigns. Briefed properly, delivered on time.' },
   { name: 'Reel', detail: 'A concept, shot and edited by me, posted on @flipsidefolly.' },
   { name: 'Story set', detail: '3–5 stories with a link sticker, for launches and offers.' },
-  { name: 'Carousel', detail: 'Styled photo posts: fit checks, lookbooks, how-tos.' },
-  { name: 'UGC video', detail: 'Content for your own ads and pages. You own the usage.' },
+  { name: 'Fit check', detail: 'Your product styled into a real workday outfit.' },
   { name: 'Dance trend', detail: 'Choreography for your song, product or campaign.' },
-  { name: 'Events', detail: 'Appearances, performances and live coverage.' },
+  { name: 'Events', detail: 'Appearances, launches and live coverage in Bengaluru.' },
 ];

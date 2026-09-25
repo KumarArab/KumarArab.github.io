@@ -1,10 +1,10 @@
 import '../styles/content.css';
 import { initPaletteChips } from '../lib/palette';
-import { gsap, ScrollTrigger, SplitText, initSmoothScroll, initCursor, initMagnetic, revealLines, reduceMotion } from '../lib/motion';
+import { gsap, ScrollTrigger, SplitText, initSmoothScroll, initCounters, initCursor, initMagnetic, revealLines, reduceMotion } from '../lib/motion';
 import { curtainIn, initTransitions } from '../lib/transition';
 import { initClock } from '../lib/clock';
 import { buildArt } from '../landing/art';
-import { audience, brandFit, collabs, creator, headline, pillars, services, type Pillar, type Stat } from './data';
+import { audience, brandFit, collabs, creator, feed, headline, pillars, services, why, type Pillar, type Stat } from './data';
 
 const $ = <T extends Element = HTMLElement>(s: string, root: ParentNode = document) => root.querySelector<T>(s)!;
 const $$ = <T extends Element = HTMLElement>(s: string, root: ParentNode = document) => [...root.querySelectorAll<T>(s)];
@@ -25,18 +25,23 @@ const ICON: Record<string, string> = {
 
 const fmt = (s: Stat) => s.value === null ? '<i class="soon">soon</i>' : `${s.value.toFixed(s.decimals ?? 0)}<small>${s.suffix ?? ''}</small>`;
 
-function reelHTML(p: Pillar) {
+function reelHTML(p: Pick<Pillar, 'name' | 'formats' | 'image' | 'reel' | 'tint' | 'icon' | 'link'>) {
   const media = p.reel
-    ? `<video src="${p.reel}" autoplay muted loop playsinline preload="metadata"></video>`
-    : `<div class="reel-ph" style="--t1:${p.tint[0]};--t2:${p.tint[1]}">${ICON[p.icon]}<b>${esc(p.name)}</b><span>reel coming soon</span></div>`;
-  return `${media}
+    ? `<video src="${p.reel}" ${p.image ? `poster="${p.image}"` : ''} autoplay muted loop playsinline preload="metadata"></video>`
+    : p.image
+      ? `<img src="${p.image}" alt="${esc(p.name)} reel on @flipsidefolly" loading="lazy">`
+      : `<div class="reel-ph" style="--t1:${p.tint[0]};--t2:${p.tint[1]}">${ICON[p.icon]}<b>${esc(p.name)}</b><span>reel coming soon</span></div>`;
+  const body = `${media}
     <div class="reel-ui" aria-hidden="true">${ICON.heart}${ICON.comment}${ICON.share}</div>
     <p class="reel-handle">${esc(creator.handle)}<small>${esc(p.formats.split(' · ')[0])}</small></p>`;
+  return p.link ? `<a class="reel-link" href="${p.link}" target="_blank" rel="noopener" aria-label="Watch the ${esc(p.name)} reel on Instagram">${body}</a>` : body;
 }
 
 /* ---------- hero ---------- */
-$('[data-hero-reel]').innerHTML = reelHTML(pillars[0]);
-$('[data-hero-stats]').innerHTML = headline.slice(0, 4).map(s => `<li><b>${fmt(s)}</b><span>${esc(s.label)}</span></li>`).join('');
+$('[data-hero-reel]').innerHTML = reelHTML({
+  name: 'Office humour', formats: 'Reel', image: '/creator/reels/DOvbsyGEy5z.webp', link: 'https://www.instagram.com/p/DOvbsyGEy5z/', tint: ['#000', '#000'], icon: 'laugh',
+});
+$('[data-hero-stats]').innerHTML = headline.map(s => `<li><b>${fmt(s)}</b><span>${esc(s.label)}</span></li>`).join('');
 const stickers = $('[data-stickers]');
 const drawStickers = () => buildArt(stickers, 'content', stickers.clientWidth, stickers.clientHeight);
 drawStickers();
@@ -48,8 +53,8 @@ $('[data-pillar-copy]').innerHTML = pillars.map((p, i) => `
     <p class="kicker">${String(i + 1).padStart(2, '0')} / ${String(pillars.length).padStart(2, '0')}</p>
     <h3>${esc(p.name)}</h3>
     <p>${esc(p.line)}</p>
-    <dl><div><dt>Formats</dt><dd style="font:400 14px/1.4 var(--mono)">${esc(p.formats)}</dd></div>
-    <div><dt>Avg. views</dt><dd>${p.avgViews === null ? '—' : p.avgViews + 'K'}</dd></div></dl>
+    <dl><div><dt>Formats</dt><dd style="font:400 14px/1.4 var(--mono)">${esc(p.formats)}</dd></div></dl>
+    ${p.link ? `<a class="btn btn-line" href="${p.link}" target="_blank" rel="noopener">Watch this reel <span class="arrow">↗</span></a>` : ''}
   </article>`).join('');
 $('[data-pillar-dots]').innerHTML = pillars.map(() => '<li></li>').join('');
 const pillarReel = $('[data-pillar-reel]');
@@ -66,30 +71,39 @@ function showPillar(i: number) {
 showPillar(0);
 
 /* ---------- numbers ---------- */
-$('[data-asof]').textContent = creator.statsAsOf ? `Instagram Insights, as of ${creator.statsAsOf}` : 'Live numbers are being added.';
+$('[data-asof]').textContent = creator.statsAsOf ? `From Instagram Insights, as of ${creator.statsAsOf}.` : 'Live numbers are being added.';
 $('[data-stats]').innerHTML = headline.map(s => `
   <div class="stat"><b>${fmt(s)}</b><p class="label">${esc(s.label)}</p><p class="note">${esc(s.note)}</p></div>`).join('');
 
 /* ---------- audience ---------- */
-const bars = (rows: { label: string; value: number | null }[]) => rows.map(r => `
-  <div class="bar-row"><span>${esc(r.label)}</span><span class="bar ${r.value === null ? 'empty' : ''}"><i style="width:${r.value ?? 0}%"></i></span><span>${r.value === null ? '—' : r.value + '%'}</span></div>`).join('');
-const hasAud = audience.age.some(a => a.value !== null);
+const bars = (rows: { label: string; value: number | null }[]) => {
+  const max = Math.max(...rows.map(r => r.value ?? 0), 1);
+  return rows.map(r => `
+  <div class="bar-row"><span>${esc(r.label)}</span><span class="bar ${r.value === null ? 'empty' : ''}"><i style="width:${((r.value ?? 0) / max) * 100}%"></i></span><span>${r.value === null ? '—' : r.value + '%'}</span></div>`).join('');
+};
 $('[data-audience]').innerHTML = `
   <article class="aud-card"><h3>Gender</h3>
     <div class="split">${audience.gender.map(g => `<div style="flex:${g.value ?? 50}"><b>${g.value === null ? '—' : g.value + '%'}</b>${esc(g.label)}</div>`).join('')}</div>
-    ${hasAud ? '' : '<p class="pending">Numbers from Instagram Insights coming soon.</p>'}</article>
-  <article class="aud-card"><h3>Age</h3>${bars(audience.age)}</article>
-  <article class="aud-card"><h3>Top cities</h3><ol class="places">${audience.cities.map(c => `<li>${esc(c)}</li>`).join('')}</ol>
-    <p class="kicker">Top countries</p><ol class="places">${audience.countries.map(c => `<li>${esc(c)}</li>`).join('')}</ol></article>`;
+    <p class="aud-note">90% of the audience is 18–34.</p></article>
+  <article class="aud-card aud-card--wide"><h3>Age</h3>${bars(audience.age)}</article>
+  <article class="aud-card aud-card--wide"><h3>Top countries</h3>${bars(audience.countries)}</article>`;
 
-/* ---------- brand fit, collabs, services ---------- */
+/* ---------- why it works ---------- */
+$('[data-why]').innerHTML = why.map((w, i) => `
+  <li class="why-item"><span class="n">${String(i + 1).padStart(2, '0')}</span><h3>${esc(w.title)}</h3><p>${esc(w.body)}</p></li>`).join('');
+
+/* ---------- brand fit, collabs, feed, services ---------- */
 $('[data-fit-yes]').innerHTML = brandFit.yes.map(b => `<span>${esc(b)}</span>`).join('');
 $('[data-fit-no]').innerHTML = brandFit.no.map(b => `<span>${esc(b)}</span>`).join('');
-const names = collabs.map(c => c.brand);
-$('[data-marquee]').innerHTML = [...names, ...names, ...names, ...names].map(n => `<span>${esc(n)}</span>`).join('');
 $('[data-collabs]').innerHTML = collabs.map(c => `
-  <article class="collab"><b>${esc(c.brand)}${c.todo ? '<span class="todo-tag">placeholder</span>' : ''}</b>
-    <dl><div><dt>What I made</dt><dd>${esc(c.what)}</dd></div><div><dt>Result</dt><dd>${esc(c.result)}</dd></div></dl></article>`).join('');
+  <a class="collab" href="${c.url}" target="_blank" rel="noopener">
+    <img class="collab-logo" src="${c.logo}" alt="${esc(c.brand)} logo" loading="lazy">
+    <b>${esc(c.brand)}</b>
+    <p class="collab-cat">${esc(c.category)}</p>
+    <p class="collab-count"><strong data-count="${c.videos}">${c.videos}</strong> UGC videos</p>
+  </a>`).join('');
+const feedItems = feed.map(f => `<a class="feed-item" href="${f.url}" target="_blank" rel="noopener"><img src="${f.image}" alt="Reel on @flipsidefolly" loading="lazy"></a>`).join('');
+$('[data-feed]').innerHTML = feedItems + feedItems.replaceAll('<a class="feed-item"', '<a class="feed-item" aria-hidden="true" tabindex="-1"');
 $('[data-services]').innerHTML = services.map((s, i) => `
   <li class="svc"><span class="n">${String(i + 1).padStart(2, '0')}</span><b>${esc(s.name)}</b><span>${esc(s.detail)}</span></li>`).join('');
 
@@ -104,6 +118,7 @@ $('[data-email]').addEventListener('click', async () => {
 
 /* ---------- motion ---------- */
 initSmoothScroll();
+initCounters();
 initCursor();
 initMagnetic();
 initClock();
@@ -150,6 +165,8 @@ if (!RM) {
   // audience bars grow, cards rise
   gsap.from('.aud-card', { y: 90, autoAlpha: 0, stagger: 0.12, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: '.aud-grid', start: 'top 80%', once: true } });
   gsap.from('.bar i', { scaleX: 0, duration: 1.4, ease: 'expo.out', stagger: 0.06, scrollTrigger: { trigger: '.aud-grid', start: 'top 70%', once: true } });
+
+  gsap.from('.why-item', { y: 100, autoAlpha: 0, stagger: 0.15, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: '.why-list', start: 'top 80%', once: true } });
 
   // brand chips fly in from scattered spots
   gsap.from('.fit-cloud span', {

@@ -90,10 +90,22 @@ section { position: relative; }
 .store svg { width: 18px; height: 18px; }
 .store.blog { background: none; color: var(--code-ink); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--code-ink) 45%, transparent); }
 .phone-wrap { grid-column: 2; grid-row: 1 / span 2; align-self: center; justify-self: center; perspective: 1400px; }
-.phone { position: relative; width: min(300px, 26vw); aspect-ratio: 9 / 19.5; transform-style: preserve-3d; }
+.phone { position: relative; width: min(380px, 30vw); aspect-ratio: 2 / 3; transform-style: preserve-3d; }
 .phone-face { position: absolute; inset: 0; border-radius: 44px; padding: 10px; background: #0b0b0d; backface-visibility: hidden; -webkit-backface-visibility: hidden;
   box-shadow: 0 50px 90px -30px rgba(0,0,0,.7), inset 0 0 0 2px #2a2a2e, inset 0 0 0 6px #111; }
 .phone-face.back { transform: rotateY(180deg); }
+/* store screenshots already include their own device frame, so drop ours */
+.phone-face.is-shot { padding: 0; background: #111; border-radius: 30px; box-shadow: 0 50px 90px -30px rgba(0,0,0,.7), 0 0 0 1px color-mix(in srgb, var(--code-ink) 15%, transparent); }
+.phone-face.is-shot .screen { border-radius: 30px; }
+.phone-face.is-shot .screen::before { display: none; }
+.app-icon { display: inline-block; width: .62em; height: .62em; border-radius: .16em; margin-right: .18em; vertical-align: .02em; box-shadow: 0 8px 24px -8px rgba(0,0,0,.5); }
+.app-metrics { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px 28px; }
+.app-metrics li { display: grid; gap: 4px; }
+.app-metrics b { font: 800 30px/1 var(--display); color: var(--code-accent); letter-spacing: -.02em; }
+.app-metrics span { font: 400 12px/1.3 var(--mono); opacity: .7; }
+.pcard-tag { font: 500 13px/1.3 var(--mono); color: var(--code-accent); letter-spacing: .04em; margin-top: -8px; }
+.browser-view img.shot { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.ccard-body small strong { font-weight: 700; color: var(--code-ink); }
 .screen { position: relative; width: 100%; height: 100%; border-radius: 35px; overflow: hidden; }
 .screen img { width: 100%; height: 100%; object-fit: cover; }
 .screen::before { content: ""; position: absolute; z-index: 2; top: 10px; left: 50%; width: 92px; height: 26px; margin-left: -46px; border-radius: 20px; background: #000; }
@@ -213,7 +225,11 @@ section { position: relative; }
   .apps .pin { grid-template-columns: 1fr; grid-template-rows: auto auto 1fr; padding-top: 92px; row-gap: 16px; }
   .apps .sec-head h2 { font-size: 30px; }
   .phone-wrap { grid-column: 1; grid-row: 2; }
-  .phone { width: min(170px, 42vw); }
+  .phone { width: min(190px, 48vw); }
+  .app-metrics b { font-size: 22px; }
+  .app-metrics { gap: 8px 18px; }
+  .app-line { font-size: 16px; }
+  .app-detail, .app-copy .xp-stack { display: none; }
   .phone-face { border-radius: 28px; padding: 6px; }
   .screen { border-radius: 23px; }
   .screen::before { width: 54px; height: 16px; margin-left: -27px; top: 7px; }

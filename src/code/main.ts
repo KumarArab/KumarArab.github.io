@@ -21,6 +21,7 @@ const ICON = {
   play: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 2.8v18.4c0 .6.7 1 1.2.7L21 12.7c.5-.3.5-1.1 0-1.4L5.2 2.1C4.7 1.8 4 2.2 4 2.8z" fill="currentColor"/></svg>',
   appstore: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.6 17.5l-1.2 2.1a1.6 1.6 0 1 1-2.8-1.6l1.2-2.1M12.5 8.2l3.1-5.3a1.6 1.6 0 1 1 2.8 1.6L12 15.6H4.3a1.6 1.6 0 1 1 0-3.2h9.6m1.8 0h3.9a1.6 1.6 0 1 1 0 3.2h-2.1l1.2 2a1.6 1.6 0 1 1-2.8 1.7L11 9.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   web: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>',
+  github: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.2-3.4-1.2-.5-1.1-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 2.9.8.1-.7.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7 1 .7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2z" fill="currentColor"/></svg>',
   blog: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10l4 4v12H5zM14 4v5h5M8 13h8M8 17h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
   linkedin: '<svg class="big" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="4" fill="currentColor"/><path d="M7 10.2V17M7 7v.1M11 17v-6.8m0 3.3c0-2 1.2-3.3 2.8-3.3s2.6 1.1 2.6 3.1V17" stroke="var(--code-bg)" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>',
   youtube: '<svg class="big" viewBox="0 0 24 24" aria-hidden="true"><rect x="1.5" y="4.5" width="21" height="15" rx="4.5" fill="currentColor"/><path d="M10 8.8l5.6 3.2-5.6 3.2z" fill="var(--code-bg)"/></svg>',
@@ -28,7 +29,7 @@ const ICON = {
 };
 
 /* ---------- hero ---------- */
-$('[data-facts]').innerHTML = facts.map(f => `<li><b data-count="${f.value}">${f.value}</b><span>${esc(f.label)}</span></li>`).join('');
+$('[data-facts]').innerHTML = facts.map(f => `<li><b data-count="${f.value}" data-suffix="${f.suffix}">${f.value}${f.suffix}</b><span>${esc(f.label)}</span></li>`).join('');
 
 const CODE: [string, string?][] = [
   ['// arab.dart\n', 'c'],
@@ -69,25 +70,30 @@ $('[data-xp]').innerHTML = experience.map(r => `
 $('[data-xp-nodes]').innerHTML = experience.map(() => '<li></li>').join('');
 
 /* ---------- apps ---------- */
+// used only when an app has no screenshots yet
 const TINTS: Record<string, [string, string, string]> = {
   cabo: ['#FF6B6B', '#FFD166', '#1B1B3A'],
   matrix: ['#00C2A8', '#3D5AFE', '#081226'],
   paperid: ['#F7B267', '#F25C54', '#2B1B17'],
 };
 function screenHTML(a: App) {
-  if (a.screens.length) return `<div class="screen"><img src="${a.screens[0]}" alt="${esc(a.name)} app screen" loading="lazy"></div>`;
+  if (a.screens.length) return `<div class="screen"><img src="${a.screens[0]}" alt="${esc(a.name)} on the store" loading="lazy"></div>`;
   const [x, y, z] = TINTS[a.id] ?? ['#888', '#444', '#111'];
   return `<div class="screen"><div class="screen-ph" style="--ph-a:${x};--ph-b:${y};--ph-c:${z}">
     <div class="icon">${esc(a.name[0])}</div><b>${esc(a.name)}</b><span>${esc(a.kind)}<br>screens coming soon</span></div></div>`;
 }
-const linkHTML = (l: App['links'][number]) =>
-  `<a class="store ${l.kind === 'blog' ? 'blog' : ''}" href="${l.url}" target="_blank" rel="noopener">${ICON[l.kind === 'appstore' ? 'appstore' : l.kind === 'blog' ? 'blog' : l.kind === 'play' ? 'play' : 'web']}${esc(l.label)}</a>`;
+const linkHTML = (l: App['links'][number]) => {
+  const icon = l.kind === 'appstore' ? ICON.appstore : l.kind === 'play' ? ICON.play : l.kind === 'blog' ? ICON.blog : l.kind === 'github' ? ICON.github : ICON.web;
+  const secondary = l.kind === 'blog' || l.kind === 'github';
+  return `<a class="store ${secondary ? 'blog' : ''}" href="${l.url}" target="_blank" rel="noopener">${icon}${esc(l.label)}</a>`;
+};
 $('[data-apps-copy]').innerHTML = apps.map((a, i) => `
   <article class="app-copy" data-i="${i}">
     <p class="app-kind">${String(i + 1).padStart(2, '0')} / ${String(apps.length).padStart(2, '0')} · ${esc(a.kind)}</p>
-    <h3 class="app-name">${esc(a.name)}</h3>
+    <h3 class="app-name">${a.icon ? `<img class="app-icon" src="${a.icon}" alt="">` : ''}${esc(a.name)}</h3>
     <p class="app-line">${esc(a.line)}</p>
     <p class="app-detail">${esc(a.detail)}</p>
+    <ul class="app-metrics">${a.metrics.map(m => `<li><b>${esc(m.value)}</b><span>${esc(m.label)}</span></li>`).join('')}</ul>
     <div class="app-links">${a.links.map(linkHTML).join('')}</div>
     <div class="xp-stack">${a.stack.map(s => `<span class="chip">${esc(s)}</span>`).join('')}</div>
   </article>`).join('');
@@ -99,6 +105,7 @@ function setFace(which: 'front' | 'back', i: number) {
   if (faceIdx[which] === i) return;
   faceIdx[which] = i;
   faces[which].innerHTML = screenHTML(apps[i]);
+  faces[which].classList.toggle('is-shot', apps[i].screens.length > 0);
 }
 setFace('front', 0);
 setFace('back', 1);
@@ -108,7 +115,8 @@ $('[data-products]').innerHTML = products.map((p, i) => `
   <article class="pcard" style="--i:${i}">
     <div class="pcard-copy">
       <span class="pill status ${p.status === 'Live' ? 'live' : 'dev'}"><span class="dot"></span>${p.status}</span>
-      <h3>${esc(p.name)}${p.todo ? '<span class="todo-tag">confirm copy</span>' : ''}</h3>
+      <h3>${esc(p.name)}</h3>
+      <p class="pcard-tag">${esc(p.tag)}</p>
       <dl>
         <div><dt>The problem</dt><dd>${esc(p.problem)}</dd></div>
         <div><dt>What I built</dt><dd>${esc(p.solution)}</dd></div>
@@ -118,9 +126,9 @@ $('[data-products]').innerHTML = products.map((p, i) => `
     <a class="browser" href="${p.url}" target="_blank" rel="noopener" aria-label="Open ${esc(p.name)}">
       <div class="browser-bar"><i></i><i></i><i></i><span>${esc(p.url.replace(/^https?:\/\//, ''))}</span></div>
       <div class="browser-view">
-        <div class="fallback">${esc(p.name)}<span>live preview</span></div>
+        ${p.image ? `<img class="shot" src="${p.image}" alt="${esc(p.name)} website" loading="lazy">` : `<div class="fallback">${esc(p.name)}<span>${esc(p.tag)}</span></div>`}
         ${p.embed ? `<iframe data-src="${p.url}" title="${esc(p.name)} live preview" loading="lazy" tabindex="-1"></iframe>` : ''}
-        <span class="pill live-hint" style="background:#fff;color:#111;border-color:#111"><span class="dot"></span>Live site</span>
+        <span class="pill live-hint" style="background:#fff;color:#111;border-color:#111"><span class="dot"></span>${p.embed ? 'Live preview' : 'Open site ↗'}</span>
       </div>
     </a>
   </article>`).join('');
@@ -161,7 +169,7 @@ playCover.addEventListener('click', () => {
 /* ---------- community ---------- */
 function commVisual(c: (typeof community)[number]) {
   if (c.kind === 'github') {
-    return `<img class="avatar" src="https://github.com/KumarArab.png?size=200" alt="" loading="lazy">
+    return `<img class="avatar" src="/work/github-avatar.webp" alt="" loading="lazy">
       <img class="chart" src="https://ghchart.rshah.org/KumarArab" alt="GitHub contributions chart" loading="lazy" onerror="this.remove()">`;
   }
   if (c.kind === 'blog') return `<iframe data-src="${c.url}" title="Cabo engineering blog preview" loading="lazy" tabindex="-1"></iframe>`;
@@ -170,7 +178,7 @@ function commVisual(c: (typeof community)[number]) {
 $('[data-comm]').insertAdjacentHTML('beforeend', community.map(c => `
   <a class="ccard" href="${c.url}" target="_blank" rel="noopener">
     <div class="ccard-visual">${commVisual(c)}</div>
-    <div class="ccard-body"><small>${esc(c.handle)}</small><b>${esc(c.name)}</b><p>${esc(c.line)}</p><span class="go">${esc(c.cta)} ↗</span></div>
+    <div class="ccard-body"><small>${esc(c.handle)}${c.stat ? ` · <strong>${esc(c.stat)}</strong>` : ''}</small><b>${esc(c.name)}</b><p>${esc(c.line)}</p><span class="go">${esc(c.cta)} ↗</span></div>
   </a>`).join(''));
 
 /* ---------- stack rows ---------- */
