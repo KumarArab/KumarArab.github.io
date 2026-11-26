@@ -47,14 +47,26 @@ function deckHTML(a: App) {
     ${a.screens.map((src, i) => `<figure class="deck-card" data-pos="${i}"><img src="${src}" alt="${esc(a.name)} screen ${i + 1}" loading="lazy"></figure>`).join('')}
   </div><ol class="deck-dots" aria-hidden="true">${a.screens.map((_, i) => `<li class="${i === 0 ? 'is-on' : ''}"></li>`).join('')}</ol>`;
 }
+/** A calmer, editorial stage for finance apps: the app's reel plays in a phone, real screens sit
+ *  behind it, and a few glass cards with real details drift around it. */
+function showcaseHTML(a: App) {
+  const [left, right] = a.screens;
+  return `<div class="showcase">
+    ${left ? `<img class="sc-side sc-left" src="${left}" alt="${esc(a.name)} screen" loading="lazy">` : ''}
+    ${right ? `<img class="sc-side sc-right" src="${right}" alt="${esc(a.name)} screen" loading="lazy">` : ''}
+    <div class="sc-phone"><video data-reel src="${a.reel}" poster="${a.poster ?? ''}" muted loop playsinline preload="none" aria-label="${esc(a.name)} app preview"></video></div>
+    ${(a.chips ?? []).map((c, i) => `<div class="sc-chip" style="--k:${i}"><small>${esc(c.label)}</small><b>${esc(c.value)}</b></div>`).join('')}
+  </div>`;
+}
+const visualHTML = (a: App) => (a.visual === 'showcase' ? showcaseHTML(a) : deckHTML(a));
 const linkHTML = (l: App['links'][number]) => {
   const icon = l.kind === 'appstore' ? ICON.appstore : l.kind === 'play' ? ICON.play : l.kind === 'blog' ? ICON.blog : l.kind === 'github' ? ICON.github : ICON.web;
   const secondary = l.kind === 'blog' || l.kind === 'github';
   return `<a class="store ${secondary ? 'blog' : ''}" href="${l.url}" target="_blank" rel="noopener">${icon}${esc(l.label)}</a>`;
 };
 $('[data-apps-copy]').innerHTML = apps.map((a, i) => `
-  <article class="app-copy" data-i="${i}">
-    <div class="orbit-m">${deckHTML(a)}</div>
+  <article class="app-copy" data-i="${i}" data-app="${a.id}">
+    <div class="orbit-m">${visualHTML(a)}</div>
     <p class="app-kind">${String(i + 1).padStart(2, '0')} / ${String(apps.length).padStart(2, '0')} · ${esc(a.kind)}</p>
     <h3 class="app-name">${a.icon ? `<img class="app-icon" src="${a.icon}" alt="">` : ''}${esc(a.name)}</h3>
     <p class="app-line">${esc(a.line)}</p>
@@ -64,7 +76,7 @@ $('[data-apps-copy]').innerHTML = apps.map((a, i) => `
     <div class="xp-stack">${a.stack.map(s => `<span class="chip">${esc(s)}</span>`).join('')}</div>
   </article>`).join('');
 // the sticky stage holds one deck of screenshots per app and crossfades between them
-$('[data-phone]').innerHTML = apps.map((a, i) => `<div class="orbit ${i === 0 ? 'is-on' : ''}">${deckHTML(a)}</div>`).join('');
+$('[data-phone]').innerHTML = apps.map((a, i) => `<div class="orbit ${i === 0 ? 'is-on' : ''}" data-app="${a.id}">${visualHTML(a)}</div>`).join('');
 
 /* ---------- decks: lay out, shuffle, fan, tilt ---------- */
 function layDeck(deck: HTMLElement) {
@@ -251,12 +263,28 @@ $$('.xp-card').forEach((card, i) => ScrollTrigger.create({
   trigger: card, start: 'top 65%', end: 'bottom 35%',
   onToggle: s => { card.classList.toggle('is-on', s.isActive); if (s.isActive) nodes.forEach((n, j) => n.classList.toggle('is-on', j <= i)); },
 }));
+// reels only download and play while their stage is on screen and active
+const reelsVisible = new Set<Element>();
+function syncReels() {
+  $$<HTMLVideoElement>('video[data-reel]').forEach(v => {
+    const orbit = v.closest('.orbit');
+    const on = reelsVisible.has(v) && (!orbit || orbit.classList.contains('is-on')) && v.offsetParent !== null;
+    if (on) { v.preload = 'auto'; v.play().catch(() => {}); } else v.pause();
+  });
+}
+const reelIO = new IntersectionObserver(es => {
+  es.forEach(e => { if (e.isIntersecting) reelsVisible.add(e.target); else reelsVisible.delete(e.target); });
+  syncReels();
+});
+$$('video[data-reel]').forEach(v => reelIO.observe(v));
+
 const shots = $$('[data-phone] .orbit');
 $$('.app-copy').forEach((copy, i) => ScrollTrigger.create({
   trigger: copy, start: 'top 55%', end: 'bottom 45%',
   onToggle: s => {
     copy.classList.toggle('is-on', s.isActive);
     if (s.isActive) shots.forEach((img, j) => img.classList.toggle('is-on', j === i));
+    syncReels();
   },
 }));
 $$('.xp-card')[0]?.classList.add('is-on');

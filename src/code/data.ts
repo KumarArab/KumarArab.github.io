@@ -66,6 +66,10 @@ export const experience: Role[] = [
 export interface App {
   id: string; name: string; kind: string; line: string; detail: string;
   links: LinkOut[]; stack: string[]; screens: string[]; metrics: Metric[]; icon?: string; todo?: string;
+  /** 'deck' (default): screenshots as a shuffling card deck. 'showcase': the app's reel in a phone with floating detail cards. */
+  visual?: 'deck' | 'showcase';
+  reel?: string; poster?: string;
+  chips?: { label: string; value: string }[];
 }
 
 // screens: store screenshots saved in /public/work/<id>/
@@ -82,6 +86,25 @@ export const apps: App[] = [
     metrics: [{ value: '50K+', label: 'downloads' }, { value: '4.1★', label: 'App Store' }, { value: '4', label: 'games in one app' }],
     stack: ['Flutter', 'Node.js', 'Firebase', 'WebSockets', 'AdMob mediation', 'Mixpanel'],
     screens: ['/work/cabo/1.webp', '/work/cabo/2.webp', '/work/cabo/3.webp', '/work/cabo/4.webp', '/work/cabo/5.webp'], icon: '/work/cabo/icon.webp',
+  },
+  {
+    id: 'buckminister', name: 'Buckminister', kind: 'Expense tracker · iPhone', visual: 'showcase',
+    line: 'Your money in one clear picture.',
+    detail: 'Personal and shared expenses in one place. Log a spend in about three seconds, or just tell Claude, ChatGPT or Siri "lunch 450". Recurring bills add themselves, splits settle in the fewest payments, and everything stays on your phone unless you choose to sign in.',
+    links: [
+      { label: 'App Store', url: 'https://apps.apple.com/us/app/buckminister-expense-tracker/id6816632973', kind: 'appstore' },
+      { label: 'Website', url: 'https://buckminister.com', kind: 'web' },
+    ],
+    metrics: [{ value: 'Free', label: 'no ads, ever' }, { value: '~3s', label: 'to log an expense' }, { value: '4', label: 'AI assistants via MCP' }],
+    stack: ['iOS', 'MCP server', 'Siri & Shortcuts', 'Widgets', 'Multi-currency', 'Offline-first'],
+    screens: ['/work/buckminister/summary.webp', '/work/buckminister/splits.webp'],
+    reel: '/work/buckminister/reel.mp4', poster: '/work/buckminister/poster.webp', icon: '/work/buckminister/icon.webp',
+    chips: [
+      { label: 'This month', value: '₹44,613' },
+      { label: 'Claude added', value: '₹450 · lunch' },
+      { label: 'Smart settle', value: 'fewest payments' },
+      { label: 'Private', value: 'no account needed' },
+    ],
   },
   {
     id: 'matrix', name: 'Matrix News', kind: 'AI news app',
@@ -116,7 +139,6 @@ export const products: Product[] = [
   { name: 'SnapMyCode', tag: 'Code-to-image API', status: 'Live', problem: 'Sharing code as an image meant screenshots, cropping and ugly fonts.', solution: 'One POST request returns a pixel-perfect PNG, WebP or SVG in under a second. 24 languages, 10 themes, free and paid plans.', url: 'https://www.snapmycode.in', embed: false, image: '/work/products/snapmycode.webp' },
   { name: 'Casca', tag: 'Reels to YouTube, on autopilot', status: 'Live', problem: 'Posting every reel twice, once on Instagram and again on YouTube.', solution: 'Casca picks up new Instagram reels and cross-posts them to YouTube Shorts automatically.', url: 'https://casca.web.app', embed: true },
   { name: 'Flutter Guru', tag: 'LinkedIn post automation', status: 'Live', problem: 'Writing an informative LinkedIn post every day takes hours.', solution: 'A dashboard that drafts and publishes daily Flutter posts to LinkedIn for me.', url: 'https://flutter-linkedin-guru.web.app/#/login', embed: false },
-  { name: 'Buckminister', tag: 'Private expense tracker for iPhone', status: 'In development', problem: 'Expense apps want your data before they help you.', solution: 'Log in seconds, set budgets with alerts, export to CSV and split bills with friends. Your data stays on your device.', url: 'https://buckminister.com', embed: true, image: '/work/products/buckminister.webp' },
 ];
 
 export interface Playable { name: string; line: string; url: string }

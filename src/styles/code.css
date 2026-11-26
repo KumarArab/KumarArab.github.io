@@ -119,6 +119,38 @@ section { position: relative; }
 .orbit-m { display: none; }
 @media (prefers-reduced-motion: reduce) { .deck-card { transition: none; } }
 
+/* finance showcase (Buckminister): the reel in a phone, real screens behind, glass detail cards drifting around */
+.showcase { --bm-green: #0E3B2C; --bm-gold: #E7C873; position: relative; width: calc(var(--w) * 1.95); height: calc(var(--w) * 16 / 9 * .92 + 40px); display: grid; place-items: center; }
+.showcase::before { content: ""; position: absolute; inset: 4% 0; border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, #2E8B64 55%, transparent), color-mix(in srgb, var(--bm-green) 60%, transparent) 55%, transparent);
+  filter: blur(30px); opacity: .9; }
+.sc-phone { position: relative; z-index: 2; width: calc(var(--w) * .92); aspect-ratio: 9 / 16; border-radius: 30px; overflow: hidden; background: var(--bm-green);
+  box-shadow: 0 0 0 6px #0b0b0d, 0 0 0 7px rgba(255,255,255,.08), 0 50px 90px -30px rgba(0,0,0,.85); }
+.sc-phone video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sc-side { position: absolute; z-index: 1; top: 50%; width: calc(var(--w) * .6); aspect-ratio: 924 / 2000; object-fit: cover; border-radius: 18px;
+  opacity: .5; box-shadow: 0 30px 60px -30px rgba(0,0,0,.8); transition: opacity .5s, transform .6s var(--ease-out); }
+.sc-left { left: 2%; transform: translateY(-50%) rotate(-7deg); }
+.sc-right { right: 2%; transform: translateY(-46%) rotate(7deg); }
+.showcase:hover .sc-side { opacity: .85; }
+.showcase:hover .sc-left { transform: translate(-8%, -50%) rotate(-10deg); }
+.showcase:hover .sc-right { transform: translate(8%, -46%) rotate(10deg); }
+.sc-chip { position: absolute; z-index: 3; display: grid; gap: 2px; padding: 10px 14px; border-radius: 14px; white-space: nowrap;
+  background: color-mix(in srgb, var(--bm-green) 55%, transparent); border: 1px solid rgba(231, 200, 115, .28);
+  backdrop-filter: blur(14px) saturate(1.3); -webkit-backdrop-filter: blur(14px) saturate(1.3);
+  box-shadow: 0 20px 40px -20px rgba(0,0,0,.7); animation: sc-float 7s ease-in-out infinite; animation-delay: calc(var(--k) * -1.8s); }
+.sc-chip small { font: 500 10px/1.2 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.6); }
+.sc-chip b { font: italic 400 20px/1.1 var(--serif); color: #F3EEDF; }
+.sc-chip:nth-of-type(2) { top: 9%; left: 0; }
+.sc-chip:nth-of-type(3) { top: 26%; right: -4%; }
+.sc-chip:nth-of-type(4) { bottom: 22%; left: -6%; }
+.sc-chip:nth-of-type(5) { bottom: 7%; right: 2%; }
+.sc-chip:nth-of-type(2) b, .sc-chip:nth-of-type(3) b { color: var(--bm-gold); }
+@keyframes sc-float { 50% { transform: translateY(-10px); } }
+@media (prefers-reduced-motion: reduce) { .sc-chip { animation: none; } }
+/* the copy for a finance app takes a quieter, editorial tone */
+.app-copy[data-app="buckminister"] .app-line { font: italic 400 clamp(24px, 2.4vw, 32px)/1.15 var(--serif); color: #E7C873; letter-spacing: 0; }
+.app-copy[data-app="buckminister"] .app-metrics b { color: #E7C873; }
+
 /* ---------- products: stacking cards ---------- */
 .products { padding: 120px var(--gutter) 10vh; }
 .sec-head--flow { margin-bottom: 8vh; max-width: 900px; }
@@ -231,6 +263,14 @@ section { position: relative; }
   .phone-wrap { display: none; }
   .app-copy { min-height: 0; opacity: 1; padding-block: 0 72px; }
   .orbit-m { --w: min(200px, 50vw); display: grid; justify-items: center; gap: 16px; padding: 12px 0 8px; margin-bottom: 8px; overflow: hidden; }
+  .orbit-m .showcase { width: min(100%, calc(var(--w) * 1.75)); }
+  .orbit-m .sc-chip { padding: 7px 10px; border-radius: 11px; }
+  .orbit-m .sc-chip b { font-size: 15px; }
+  .orbit-m .sc-chip small { font-size: 8px; }
+  .orbit-m .sc-chip:nth-of-type(2) { left: 0; }
+  .orbit-m .sc-chip:nth-of-type(3) { right: 0; }
+  .orbit-m .sc-chip:nth-of-type(4) { left: 0; }
+  .orbit-m .sc-chip:nth-of-type(5) { right: 0; }
   .orbit-m .deck:hover .deck-card { transform: translate(calc(var(--s) * var(--p) * 14px), calc(var(--p) * -8px)) rotate(calc(var(--s) * (3deg + var(--p) * 2deg))) scale(calc(1 - var(--p) * .05)); }
   .app-name { font-size: clamp(40px, 11vw, 56px); }
 
